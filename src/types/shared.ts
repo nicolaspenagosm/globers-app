@@ -1,20 +1,24 @@
-export interface Entity {
-  id: string;
+export interface IEntity {
+  id?: string;
 }
 
-export interface Contact extends Entity {
+export interface IContact extends IEntity {
   email: string;
   name: string;
   lastname: string;
-  photoUrl: string;
+  photoUrl?: string;
 }
 
-export interface User extends Contact {
+export interface IUser extends IContact {
   chatsKeys: string[];
 }
 
-export type Login = {
+export interface IAuth {
   email: string;
   password: string;
   returnSecureToken: boolean;
-};
+}
+
+export interface IHTTPParams {
+  [key: string]: string;
+}
