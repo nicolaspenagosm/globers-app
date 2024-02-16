@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import { useEffect } from "react";
 import { streamingAPI } from "./services/streaming-sse";
+import { autoLogin } from "./store/auth-slice/auth-actions";
+import { useAppDispatch } from "./store";
 
 export const ROOT_PATHS = {
   login: "/login",
@@ -17,8 +19,13 @@ export const ROOT_PATHS = {
 };
 
 function App() {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
 
-  useEffect(() => () => streamingAPI.closeConnections(), []);
+    const fn = () => {console.log("Hola")}
+    dispatch(autoLogin(fn))
+    return () => streamingAPI.closeConnections();
+  }, []);
 
   return (
     <BrowserRouter>

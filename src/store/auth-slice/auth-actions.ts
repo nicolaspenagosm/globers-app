@@ -5,12 +5,19 @@ import { authActions } from "./auth-slice";
 import { crudAPI } from "../../services/crud-api";
 import { storageAPI } from "../../services/firebase-api/storage-api";
 import { streamingAPI } from "../../services/streaming-sse";
-import { fromSecondsToMiliseconds } from "../../utils/date";
+import {
+  calculateExpiresIn,
+  fromSecondsToMiliseconds,
+  isDateExpired,
+} from "../../utils/date";
 import { IOnUpdateFn } from "../../services/streaming-sse/StreamingSSE/StreamingSSE";
 import store from "..";
-
-const LOCAL_STORAGE_USER_KEY = "app-logged-user";
-const LOCAL_STORAGE_AUTH_KEY = "app-auth";
+import {
+  authDataExists,
+  clearAuthDataInLocalStorage,
+  getAuthDatFromLocalStorage as getAuthDataFromLocalStorage,
+  persistsAuthDataInLocalStorage,
+} from "../../utils/localStorage";
 
 export const signUp = (
   authCredentials: IAuth,
@@ -33,19 +40,50 @@ export const login = (
 ) => {
   return async (dispatch: Dispatch) => {
     const { userId, token } = await authUser(authCredentials, dispatch, false);
-    const loggedUser = (await crudAPI.getUser(userId)).data;
-    dispatch(authActions.setLoggedUser(loggedUser));
-
-    if (loggedUser.chatsKeys) {
-      streamingAPI.streamChatUpdates({ auth: token }, userId, onUpdateCallback);
-    }
+    loadUser(userId, token, dispatch, onUpdateCallback);
   };
 };
 
 export const logout = () => {
+
   return async (dispatch: Dispatch) => {
     revokeUserAuth(dispatch);
   };
+};
+
+export const autoLogin = (onUpdateCallback: IOnUpdateFn) => {
+  return async (dispatch: Dispatch) => {
+    if (!authDataExists()) return;
+    const { tokenData, userId } = getAuthDataFromLocalStorage();
+
+    if (isDateExpired(+tokenData!.tokenExpirationDate)) {
+      clearAuthDataInLocalStorage();
+      return;
+    }
+
+    dispatch(authActions.setToken( tokenData ));
+
+    handleAutologout(
+      calculateExpiresIn(+tokenData!.tokenExpirationDate),
+      dispatch
+    );
+
+    loadUser(userId!, tokenData!.token, dispatch, onUpdateCallback);
+  };
+};
+
+const loadUser = async (
+  userId: string,
+  token: string,
+  dispatch: Dispatch,
+  onUpdateCallback: IOnUpdateFn
+) => {
+  const loggedUser = (await crudAPI.getUser(userId)).data;
+  dispatch(authActions.setLoggedUser(loggedUser));
+
+  if (loggedUser.chatsKeys) {
+    streamingAPI.streamChatUpdates({ auth: token }, userId, onUpdateCallback);
+  }
 };
 
 const authUser = async (
@@ -53,7 +91,12 @@ const authUser = async (
   dispatch: Dispatch,
   isNewUser: boolean
 ) => {
-  const { idToken, expiresIn, localId } = (
+ 
+  const {
+    idToken,
+    expiresIn,
+    localId: userId,
+  } = (
     isNewUser
       ? await authAPI.signUp(authCredentials)
       : await authAPI.login(authCredentials)
@@ -63,21 +106,27 @@ const authUser = async (
     tokenExpirationDate: Date.now() + +expiresIn,
     tokenExpirationTimerId: null,
   };
-  dispatch(authActions.setToken({ tokenData }));
+
+  dispatch(authActions.setToken(tokenData ));
+  persistsAuthDataInLocalStorage(tokenData, userId);
   handleAutologout(fromSecondsToMiliseconds(+expiresIn), dispatch);
-  return { token: idToken, userId: localId };
+  return { token: idToken, userId: userId };
 };
 
 const revokeUserAuth = (dispatch: Dispatch) => {
+
   const tokenExpirationTimerId =
     store.getState().auth.tokenData?.tokenExpirationTimerId;
   if (tokenExpirationTimerId) clearTimeout(tokenExpirationTimerId);
   streamingAPI.closeConnections();
+  clearAuthDataInLocalStorage();
   dispatch(authActions.logout());
 };
 
 const handleAutologout = (expiresIn: number, dispatch: Dispatch) => {
+ 
   const timerId = setTimeout(() => {
+
     revokeUserAuth(dispatch);
   }, expiresIn);
   dispatch(authActions.setAutoLogoutTimer({ timerId }));

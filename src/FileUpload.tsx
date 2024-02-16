@@ -42,59 +42,6 @@ const FileUpload: React.FC = () => {
     }
   };
 
-  const test = () => {
-    // if (typeof EventSource !== "undefined") {
-    //   const url =  `https://globers-app-default-rtdb.firebaseio.com/chats/${loggedUser?.id}.json?auth=`+token;
-    //   console.log(url);
-    //   var source = new EventSource(
-    //    url
-    //   );
-    //   source.onmessage = function (event) {
-    //     // document.getElementById("result").innerHTML += event.data + "<br>";
-    //   };
-    //   source.addEventListener(
-    //     "message",
-    //     function (e) {
-    //       console.log(e.data);
-    //     },
-    //     false
-    //   );
-    //   source.addEventListener(
-    //     "open",
-    //     function (e) {
-    //       console.log("Connection was opened.");
-    //     },
-    //     false
-    //   );
-    //   source.addEventListener(
-    //     "error",
-    //     function (e) {
-    //       console.log("Error - connection was lost.");
-    //     },
-    //     false
-    //   );
-    //   //magic goes here!
-    //   source.addEventListener(
-    //     "patch",
-    //     function (e) {
-    //       console.log("Patch UP - " + e.data);
-    //       console.log(JSON.parse(e.data));
-    //     },
-    //     false
-    //   );
-    //   //And here!
-    //   source.addEventListener(
-    //     "put",
-    //     function (e) {
-    //       console.log("Put UP - " + e.data);
-    //     },
-    //     false
-    //   );
-    // } else {
-    //   console.log("Sorry, your browser does not support server-sent events...");
-    // }
-  };
-
   return (
     <>
       <div role="tabls">
@@ -102,7 +49,7 @@ const FileUpload: React.FC = () => {
         <button onClick={handleUpload}>Upload</button>
       </div>
       <div>
-        <button onClick={test}>Server Sent Event </button>
+        <button >Server Sent Event </button>
       </div>
     </>
   );

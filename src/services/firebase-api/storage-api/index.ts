@@ -10,7 +10,6 @@ export const storageAPI = {
         .then(() => {
           getDownloadURL(imageRef)
             .then((downloadURL: string) => {
-              console.log(downloadURL);
               resolve(downloadURL);
             })
             .catch((error) => handleErrorResponse(error));
