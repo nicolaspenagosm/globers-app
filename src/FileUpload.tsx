@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { storageAPI } from "./services/firebase-api/storage-api";
 import { RootState, useAppDispatch } from "./store";
-import { login, signUp } from "./store/auth-slice/auth-actions";
+import { login, signUp, logout } from "./store/auth-slice/auth-actions";
 import { useSelector } from "react-redux";
 
 const FileUpload: React.FC = () => {
   const dispatch = useAppDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       setSelectedFile(event.target.files[0]);
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   const handleUpload = async () => {
@@ -46,10 +49,17 @@ const FileUpload: React.FC = () => {
     <>
       <div role="tabls">
         <input type="file" onChange={handleFileChange} />
-        <button onClick={handleUpload}>Upload</button>
+        <button onClick={handleUpload}>Login</button>
       </div>
       <div>
-        <button >Server Sent Event </button>
+        <button>Server Sent Event </button>
+        <button
+          onClick={() => {
+            handleLogout();
+          }}
+        >
+          logout{" "}
+        </button>
       </div>
     </>
   );

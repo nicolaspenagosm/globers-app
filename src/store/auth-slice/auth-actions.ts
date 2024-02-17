@@ -13,9 +13,9 @@ import {
 import { IOnUpdateFn } from "../../services/streaming-sse/StreamingSSE/StreamingSSE";
 import store from "..";
 import {
-  authDataExists,
+  authDataExists as authDataExistsInLocalStorage,
   clearAuthDataInLocalStorage,
-  getAuthDatFromLocalStorage as getAuthDataFromLocalStorage,
+  getAuthDataFromLocalStorage as getAuthDataFromLocalStorage,
   persistsAuthDataInLocalStorage,
 } from "../../utils/localStorage";
 
@@ -45,7 +45,6 @@ export const login = (
 };
 
 export const logout = () => {
-
   return async (dispatch: Dispatch) => {
     revokeUserAuth(dispatch);
   };
@@ -53,23 +52,51 @@ export const logout = () => {
 
 export const autoLogin = (onUpdateCallback: IOnUpdateFn) => {
   return async (dispatch: Dispatch) => {
-    if (!authDataExists()) return;
+    if (!authDataExistsInLocalStorage()) return;
     const { tokenData, userId } = getAuthDataFromLocalStorage();
 
-    if (isDateExpired(+tokenData!.tokenExpirationDate)) {
+    const tokenExpirationDate = +tokenData!.tokenExpirationDate;
+    const minutesThreshold = 5;
+    if (isDateExpired(tokenExpirationDate, minutesThreshold)) {
       clearAuthDataInLocalStorage();
       return;
     }
 
-    dispatch(authActions.setToken( tokenData ));
-
-    handleAutologout(
-      calculateExpiresIn(+tokenData!.tokenExpirationDate),
-      dispatch
-    );
+    clearPreviousTokenExpirationTimeout();
+    dispatch(authActions.setToken(tokenData));
+    handleAutologout(calculateExpiresIn(tokenExpirationDate), dispatch);
 
     loadUser(userId!, tokenData!.token, dispatch, onUpdateCallback);
   };
+};
+
+const authUser = async (
+  authCredentials: IAuth,
+  dispatch: Dispatch,
+  isNewUser: boolean
+) => {
+  const {
+    idToken,
+    expiresIn,
+    localId: userId,
+  } = (
+    isNewUser
+      ? await authAPI.signUp(authCredentials)
+      : await authAPI.login(authCredentials)
+  ).data;
+
+  const expiresInMiliseconds = fromSecondsToMiliseconds(+expiresIn);
+
+  const tokenData = {
+    token: idToken,
+    tokenExpirationDate: Date.now() + expiresInMiliseconds,
+    tokenExpirationTimerId: null,
+  };
+  clearPreviousTokenExpirationTimeout();
+  dispatch(authActions.setToken(tokenData));
+  persistsAuthDataInLocalStorage(tokenData, userId);
+  handleAutologout(expiresInMiliseconds, dispatch);
+  return { token: idToken, userId: userId };
 };
 
 const loadUser = async (
@@ -86,48 +113,22 @@ const loadUser = async (
   }
 };
 
-const authUser = async (
-  authCredentials: IAuth,
-  dispatch: Dispatch,
-  isNewUser: boolean
-) => {
- 
-  const {
-    idToken,
-    expiresIn,
-    localId: userId,
-  } = (
-    isNewUser
-      ? await authAPI.signUp(authCredentials)
-      : await authAPI.login(authCredentials)
-  ).data;
-  const tokenData = {
-    token: idToken,
-    tokenExpirationDate: Date.now() + +expiresIn,
-    tokenExpirationTimerId: null,
-  };
-
-  dispatch(authActions.setToken(tokenData ));
-  persistsAuthDataInLocalStorage(tokenData, userId);
-  handleAutologout(fromSecondsToMiliseconds(+expiresIn), dispatch);
-  return { token: idToken, userId: userId };
-};
-
 const revokeUserAuth = (dispatch: Dispatch) => {
-
-  const tokenExpirationTimerId =
-    store.getState().auth.tokenData?.tokenExpirationTimerId;
-  if (tokenExpirationTimerId) clearTimeout(tokenExpirationTimerId);
+  clearPreviousTokenExpirationTimeout();
   streamingAPI.closeConnections();
   clearAuthDataInLocalStorage();
   dispatch(authActions.logout());
 };
 
 const handleAutologout = (expiresIn: number, dispatch: Dispatch) => {
- 
+  clearPreviousTokenExpirationTimeout();
   const timerId = setTimeout(() => {
-
     revokeUserAuth(dispatch);
   }, expiresIn);
   dispatch(authActions.setAutoLogoutTimer({ timerId }));
+};
+
+const clearPreviousTokenExpirationTimeout = () => {
+  const prevTimeout = store.getState().auth.tokenData?.tokenExpirationTimerId;
+  if (prevTimeout) clearTimeout(prevTimeout);
 };

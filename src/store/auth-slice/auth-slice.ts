@@ -34,7 +34,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setToken(state, { payload }: PayloadAction<TokenData>) {
-
       state.tokenData = payload;
     },
     setAutoLogoutTimer(

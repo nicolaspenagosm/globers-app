@@ -23,7 +23,7 @@ export const authDataExists = () => {
   );
 };
 
-export const getAuthDatFromLocalStorage = () => {
+export const getAuthDataFromLocalStorage = () => {
   const tokenData: TokenData = JSON.parse(
     localStorage.getItem(LOCAL_STORAGE_AUTH_KEY)!
   );
