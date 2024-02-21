@@ -1,17 +1,17 @@
-import { ERROR_MSGS } from "../../../resources/error";
-import { IHTTPParams } from "../../../types/shared";
-import { parseHTTPParams } from "../../../utils/http";
+import { ERROR_MSGS } from '../../../resources/error';
+import { IHTTPParams } from '../../../types/shared';
+import { parseHTTPParams } from '../../../utils/http';
 
 export type IOnUpdateFn = (event: MessageEvent) => void;
 export type IOnCloseStreaming = () => void;
 
 const SERVER_EVENTS = {
-  put: "put",
-  patch: "patch",
-  keepAlive: "keep-alive",
-  cancel: "cancel",
-  authRevoked: "auth_revoked",
-  error: "error",
+  put: 'put',
+  patch: 'patch',
+  keepAlive: 'keep-alive',
+  cancel: 'cancel',
+  authRevoked: 'auth_revoked',
+  error: 'error',
 };
 
 export class StreamingSSE {
@@ -26,19 +26,19 @@ export class StreamingSSE {
   public startListening(
     onUpdateCallback: IOnUpdateFn,
     endpoint: string,
-    params: IHTTPParams
+    params: IHTTPParams,
   ) {
-    if (typeof EventSource === "undefined")
+    if (typeof EventSource === 'undefined')
       throw new Error(ERROR_MSGS.streamingAPI.sseNotSupported.msg);
 
     if (this.source) this.close();
 
     this.source = new EventSource(
-      `${this.baseUrl}/${endpoint}${parseHTTPParams(params)}`
+      `${this.baseUrl}/${endpoint}${parseHTTPParams(params)}`,
     );
 
     this.source.onmessage = function (event) {
-      console.log("ON MESSAGE");
+      console.log('ON MESSAGE');
       console.log(event.data);
     };
 
@@ -47,28 +47,28 @@ export class StreamingSSE {
       () => {
         this.close();
         console.error(
-          `${ERROR_MSGS.streamingAPI.connectionError.code}:${ERROR_MSGS.streamingAPI.connectionError.msg}`
+          `${ERROR_MSGS.streamingAPI.connectionError.code}:${ERROR_MSGS.streamingAPI.connectionError.msg}`,
         );
       },
-      false
+      false,
     );
 
     this.source.addEventListener(
       SERVER_EVENTS.patch,
       (e) => {
-        console.log("Listener patch");
+        console.log('Listener patch');
         onUpdateCallback(e);
       },
-      false
+      false,
     );
 
     this.source.addEventListener(
       SERVER_EVENTS.put,
       function (e) {
-        console.log("Listener Put");
-        console.log("Put UP - " + e.data);
+        console.log('Listener Put');
+        console.log('Put UP - ' + e.data);
       },
-      false
+      false,
     );
   }
 

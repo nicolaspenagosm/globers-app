@@ -1,0 +1,8 @@
+#storybook-root{
+    height: 100%;
+    margin: -14px;
+}
+
+html, body{
+    height: 100%;
+}

@@ -1,9 +1,11 @@
-import { IHTTPParams } from "../types/shared";
+import { IHTTPParams } from '../types/shared';
+import { isNumber } from './number';
 
 export const parseHTTPParams = (params: IHTTPParams) => {
-  let parsedParams = "";
+  let parsedParams = '?';
   for (const [key, value] of Object.entries(params)) {
-    parsedParams += `?${key}=${value}`;
+    const val = isNumber(value) ? `${value}` : `"${value}"`;
+    parsedParams += `${key}=${val}&`;
   }
   return parsedParams;
 };

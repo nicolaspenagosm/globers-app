@@ -4,7 +4,7 @@ export const fromSecondsToMiliseconds = (seconds: number) => {
 
 export const isDateExpired = (
   date: number,
-  expirationThresholdInMinutes: number
+  expirationThresholdInMinutes: number,
 ) => {
   const now = Date.now();
   const expirationThresholdInMs = expirationThresholdInMinutes * 60 * 1000;

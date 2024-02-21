@@ -1,17 +1,17 @@
-import { IHTTPParams } from "../../types/shared";
-import {  IOnUpdateFn } from "./StreamingSSE/StreamingSSE";
-import { sseStreamingClient } from "./base";
+import { IHTTPParams } from '../../types/shared';
+import { IOnUpdateFn } from './StreamingSSE/StreamingSSE';
+import { sseStreamingClient } from './base';
 
 export const streamingAPI = {
   closeConnections: () => sseStreamingClient.close(),
   streamChatUpdates: (
     params: IHTTPParams,
     userId: string,
-    onUpdateCallback: IOnUpdateFn
+    onUpdateCallback: IOnUpdateFn,
   ) =>
     sseStreamingClient.startListening(
       onUpdateCallback,
       `/users/${userId}/chats.json`,
-      params
+      params,
     ),
 };

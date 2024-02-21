@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { storageAPI } from "./services/firebase-api/storage-api";
-import { RootState, useAppDispatch } from "./store";
-import { login, signUp, logout } from "./store/auth-slice/auth-actions";
-import { useSelector } from "react-redux";
+import React, { useState } from 'react';
+
+import { useAppDispatch } from './store';
+import { login, logout } from './store/auth-slice/auth-actions';
 
 const FileUpload: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,15 +22,15 @@ const FileUpload: React.FC = () => {
       dispatch(
         login(
           {
-            email: "teeees@gmail.com",
-            password: "jeasdasdasd",
+            email: 'teeees@gmail.com',
+            password: 'jeasdasdasd',
             returnSecureToken: true,
           },
 
           () => {
-            console.log("callback");
-          }
-        )
+            console.log('callback');
+          },
+        ),
       );
 
       return;
@@ -39,9 +38,9 @@ const FileUpload: React.FC = () => {
 
     try {
       const formData = new FormData();
-      formData.append("file", selectedFile);
+      formData.append('file', selectedFile);
     } catch (error) {
-      console.error("An error occurred while uploading the file:", error);
+      console.error('An error occurred while uploading the file:', error);
     }
   };
 
@@ -58,7 +57,7 @@ const FileUpload: React.FC = () => {
             handleLogout();
           }}
         >
-          logout{" "}
+          logout{' '}
         </button>
       </div>
     </>

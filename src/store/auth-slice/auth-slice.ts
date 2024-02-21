@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUser } from "../../types/shared";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IUser } from '../../types/shared';
 
 type TimerType = ReturnType<typeof setTimeout>;
 export type TokenData = {
@@ -30,7 +30,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     setToken(state, { payload }: PayloadAction<TokenData>) {
@@ -38,7 +38,7 @@ const authSlice = createSlice({
     },
     setAutoLogoutTimer(
       state,
-      { payload }: PayloadAction<{ timerId: TimerType }>
+      { payload }: PayloadAction<{ timerId: TimerType }>,
     ) {
       state.tokenData!.tokenExpirationTimerId = payload.timerId;
     },

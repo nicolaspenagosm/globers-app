@@ -1,28 +1,28 @@
-import { Dispatch } from "@reduxjs/toolkit";
-import { IAuth, IUser } from "../../types/shared";
-import { authAPI } from "../../services/auth-api";
-import { authActions } from "./auth-slice";
-import { crudAPI } from "../../services/crud-api";
-import { storageAPI } from "../../services/firebase-api/storage-api";
-import { streamingAPI } from "../../services/streaming-sse";
+import { Dispatch } from '@reduxjs/toolkit';
+import { IAuth, IUser } from '../../types/shared';
+import { authAPI } from '../../services/auth-api';
+import { authActions } from './auth-slice';
+import { crudAPI } from '../../services/crud-api';
+import { storageAPI } from '../../services/firebase-api/storage-api';
+import { streamingAPI } from '../../services/streaming-sse';
 import {
   calculateExpiresIn,
   fromSecondsToMiliseconds,
   isDateExpired,
-} from "../../utils/date";
-import { IOnUpdateFn } from "../../services/streaming-sse/StreamingSSE/StreamingSSE";
-import store from "..";
+} from '../../utils/date';
+import { IOnUpdateFn } from '../../services/streaming-sse/StreamingSSE/StreamingSSE';
+import store from '..';
 import {
   authDataExists as authDataExistsInLocalStorage,
   clearAuthDataInLocalStorage,
   getAuthDataFromLocalStorage as getAuthDataFromLocalStorage,
   persistsAuthDataInLocalStorage,
-} from "../../utils/localStorage";
+} from '../../utils/localStorage';
 
 export const signUp = (
   authCredentials: IAuth,
   user: IUser,
-  userPhoto: File | null
+  userPhoto: File | null,
 ) => {
   return async (dispatch: Dispatch) => {
     const { userId } = await authUser(authCredentials, dispatch, true);
@@ -36,7 +36,7 @@ export const signUp = (
 
 export const login = (
   authCredentials: IAuth,
-  onUpdateCallback: IOnUpdateFn
+  onUpdateCallback: IOnUpdateFn,
 ) => {
   return async (dispatch: Dispatch) => {
     const { userId, token } = await authUser(authCredentials, dispatch, false);
@@ -62,7 +62,7 @@ export const autoLogin = (onUpdateCallback: IOnUpdateFn) => {
       return;
     }
 
-    clearPreviousTokenExpirationTimeout();
+    //clearPreviousTokenExpirationTimeout();
     dispatch(authActions.setToken(tokenData));
     handleAutologout(calculateExpiresIn(tokenExpirationDate), dispatch);
 
@@ -73,7 +73,7 @@ export const autoLogin = (onUpdateCallback: IOnUpdateFn) => {
 const authUser = async (
   authCredentials: IAuth,
   dispatch: Dispatch,
-  isNewUser: boolean
+  isNewUser: boolean,
 ) => {
   const {
     idToken,
@@ -103,7 +103,7 @@ const loadUser = async (
   userId: string,
   token: string,
   dispatch: Dispatch,
-  onUpdateCallback: IOnUpdateFn
+  onUpdateCallback: IOnUpdateFn,
 ) => {
   const loggedUser = (await crudAPI.getUser(userId)).data;
   dispatch(authActions.setLoggedUser(loggedUser));
@@ -121,7 +121,7 @@ const revokeUserAuth = (dispatch: Dispatch) => {
 };
 
 const handleAutologout = (expiresIn: number, dispatch: Dispatch) => {
-  clearPreviousTokenExpirationTimeout();
+  // clearPreviousTokenExpirationTimeout();
   const timerId = setTimeout(() => {
     revokeUserAuth(dispatch);
   }, expiresIn);

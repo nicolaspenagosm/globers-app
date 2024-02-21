@@ -20,5 +20,5 @@ export interface IAuth {
 }
 
 export interface IHTTPParams {
-  [key: string]: string;
+  [key: string]: string | number;
 }

@@ -1,11 +1,11 @@
-import { TokenData } from "../store/auth-slice/auth-slice";
+import { TokenData } from '../store/auth-slice/auth-slice';
 
-const LOCAL_STORAGE_USER_KEY_ID = "app-logged-user-id";
-const LOCAL_STORAGE_AUTH_KEY = "app-auth-data";
+const LOCAL_STORAGE_USER_KEY_ID = 'app-logged-user-id';
+const LOCAL_STORAGE_AUTH_KEY = 'app-auth-data';
 
 export const persistsAuthDataInLocalStorage = (
   tokenData: TokenData,
-  userId: string
+  userId: string,
 ) => {
   localStorage.setItem(LOCAL_STORAGE_USER_KEY_ID, userId);
   localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, JSON.stringify(tokenData));
@@ -25,7 +25,7 @@ export const authDataExists = () => {
 
 export const getAuthDataFromLocalStorage = () => {
   const tokenData: TokenData = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_AUTH_KEY)!
+    localStorage.getItem(LOCAL_STORAGE_AUTH_KEY)!,
   );
   const userId = localStorage.getItem(LOCAL_STORAGE_USER_KEY_ID);
   return { tokenData, userId };
