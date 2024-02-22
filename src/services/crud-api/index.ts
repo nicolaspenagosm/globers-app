@@ -35,7 +35,7 @@ export const crudAPI = {
     userId: string,
     contactId: string,
     property: string,
-    value: String,
+    value: string,
   ) =>
     patch(
       `${CONTACTS_ENDPOINT}/${userId}/${contactId}/${property}.json`,

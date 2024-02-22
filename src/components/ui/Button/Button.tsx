@@ -26,13 +26,16 @@ const Button: React.FC<ButtonProps> = ({
   color,
   ariaLabel,
 }) => {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   const colorMap = useMemo(
     () => ({
       action: { color: colors.accent, hoverColor: colors.accentEmphasis },
       warning: { color: colors.warning, hoverColor: colors.warningEmphasis },
-      default: { color: colors.secondary, hoverColor: colors.secondaryEmphasis },
+      default: {
+        color: colors.secondary,
+        hoverColor: colors.secondaryEmphasis,
+      },
     }),
     [colors],
   );

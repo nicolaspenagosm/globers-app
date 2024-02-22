@@ -8,6 +8,8 @@ interface InputProps {
   type: 'text' | 'password';
   hasError: boolean;
   errorMsg?: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
 }
 
 const defaultProps: Partial<InputProps> = {
@@ -15,9 +17,15 @@ const defaultProps: Partial<InputProps> = {
   errorMsg: 'Invalid data',
 };
 
-const Input: React.FC<InputProps> = ({ label, type, hasError, errorMsg }) => {
+const Input: React.FC<InputProps> = ({
+  label,
+  type,
+  hasError,
+  errorMsg,
+  onChange,
+  value,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [value, setValue] = useState('');
 
   const isPasswordInput = type === 'password';
 
@@ -37,7 +45,7 @@ const Input: React.FC<InputProps> = ({ label, type, hasError, errorMsg }) => {
           />
         )}
         <input
-          onChange={(e) => setValue(e.target.value)}
+          onChange={onChange}
           value={value}
           id={label}
           type={isPasswordInput && !showPassword ? 'password' : 'text'}
@@ -50,7 +58,9 @@ const Input: React.FC<InputProps> = ({ label, type, hasError, errorMsg }) => {
           {label}
         </label>
       </StyledInputBox>
-      {hasError && <StyledP>{`* ${errorMsg}`}</StyledP>}
+      {hasError && (
+        <StyledP role="alert" aria-live="assertive">{`* ${errorMsg}`}</StyledP>
+      )}
     </>
   );
 };

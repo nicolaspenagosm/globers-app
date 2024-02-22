@@ -1,4 +1,4 @@
-import { ERROR_MSGS } from '../../../resources/error';
+import { ERROR_MSGS } from '../../../resources/errorCodeAndMessages';
 import { IHTTPParams } from '../../../types/shared';
 import { parseHTTPParams } from '../../../utils/http';
 
