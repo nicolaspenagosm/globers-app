@@ -1,7 +1,6 @@
 import { StoryFn, Meta } from '@storybook/react';
 import Input from './Input';
 
-
 export default {
   title: 'components/ui/Inputs',
   component: Input,
@@ -9,8 +8,20 @@ export default {
 
 const Template: StoryFn<typeof Input> = (args) => <Input {...args} />;
 
-export const FormInput = Template.bind({});
+export const EmailInput = Template.bind({});
 
-// Input.args = {
-  
-// };
+EmailInput.args = {
+  label: 'Email',
+  type: 'text',
+  hasError: false,
+  errorMsg:"Please provide a valid email"
+};
+
+export const PasswordInput = Template.bind({});
+
+PasswordInput.args = {
+  label: 'Password',
+  type: 'password',
+  hasError: false,
+  errorMsg:"Password must be at least 6 characters long"
+};
