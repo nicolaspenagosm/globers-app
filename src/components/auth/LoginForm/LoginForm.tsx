@@ -2,7 +2,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { StyledForm } from './LoginForm.styled';
 import Input from '../../ui/Input';
 import Button from '../../ui/Button';
-import { feedbackMessages } from '../../../resources/feedbackMessages';
+import { FEEDBACK_MESSAGES } from '../../../resources/feedbackMessages';
 import { emailVaidator as emailVaidatorRegex } from '../../../resources/regexs';
 
 type Inputs = {
@@ -23,6 +23,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
+  // TO-DO:changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
       {isSigningUp && (
@@ -38,9 +39,10 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
                 type="text"
                 label="Name"
                 hasError={errors.name ? true : false}
-                errorMsg={feedbackMessages.input.nameIsRequired}
+                errorMsg={FEEDBACK_MESSAGES.input.nameIsRequired}
                 onChange={field.onChange}
                 value={field.value}
+                isRequired={true}
               />
             )}
           />
@@ -55,9 +57,10 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
                 type="text"
                 label="Lastame"
                 hasError={errors.lastname ? true : false}
-                errorMsg={feedbackMessages.input.lastnameIsRequired}
+                errorMsg={FEEDBACK_MESSAGES.input.lastnameIsRequired}
                 onChange={field.onChange}
                 value={field.value}
+                isRequired={true}
               />
             )}
           />
@@ -75,9 +78,10 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
             type="text"
             label="Email"
             hasError={errors.email ? true : false}
-            errorMsg={feedbackMessages.input.invalidEmail}
+            errorMsg={FEEDBACK_MESSAGES.input.invalidEmail}
             onChange={field.onChange}
             value={field.value}
+            isRequired={true}
           />
         )}
       />
@@ -93,9 +97,10 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
             type="password"
             label="Password"
             hasError={errors.password ? true : false}
-            errorMsg={feedbackMessages.input.invalidPassword}
+            errorMsg={FEEDBACK_MESSAGES.input.invalidPassword}
             onChange={field.onChange}
             value={field.value}
+            isRequired={true}
           />
         )}
       />
@@ -113,9 +118,10 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
               type="password"
               label="Confirm password"
               hasError={errors.passwordValidation ? true : false}
-              errorMsg={feedbackMessages.input.passwordsDoNotMatch}
+              errorMsg={FEEDBACK_MESSAGES.input.passwordsDoNotMatch}
               onChange={field.onChange}
               value={field.value}
+              isRequired={true}
             />
           )}
         />

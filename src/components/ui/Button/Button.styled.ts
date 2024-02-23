@@ -17,6 +17,11 @@ export const StyledButton = styled.button<{
   border: solid 1px;
   width: fit-content;
   cursor: pointer;
+
+  &:focus {
+    outline: solid 2px ${({ theme }) => theme.colors.accent400};
+  }
+
   ${({ $styles }) => $styles}
 
   &:hover {

@@ -28,9 +28,6 @@ export const lightTheme = {
     mobile: 845,
     tablet: 1150,
   },
-  //   primary400: "#D8F0FA",
-  //   primary500: "#FBF4E2",
-  //   accentBtn500: "#E7E7EB",
   colors: {
     accentEmphasis: '#E4EEA4',
     accent400: '#D7E57A',
@@ -47,12 +44,6 @@ export const lightTheme = {
     warning: '#CF6679',
     text500: '#393A32',
   },
-
-  //   accent600: "#70738C",
-  //   accent700: "#6E707A",
-  //   accent800: "#61636D",
-  //   contrast500: "#EB6E4B",
-  //   contrast900: "#642A19",
 };
 
 export const GlobalStyles = createGlobalStyle`

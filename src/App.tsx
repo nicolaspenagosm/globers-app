@@ -11,15 +11,7 @@ import { useAppDispatch } from './store';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyles, lightTheme } from './App.styled';
 import { useResponsiveScreen } from './hooks/useResponsiveScreen';
-
-export const ROOT_PATHS = {
-  auth: '/auth',
-  signUp: '/auth/sign_up',
-  overview: '/',
-  favorites: '/favorites',
-  contacts: '/contacts',
-  notFound: '*',
-};
+import { ROOT_PATHS } from './resources/routes';
 
 function App() {
   const dispatch = useAppDispatch();

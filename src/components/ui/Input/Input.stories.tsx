@@ -1,6 +1,6 @@
 import { StoryFn, Meta } from '@storybook/react';
 import Input from './Input';
-import { feedbackMessages } from '../../../resources/feedbackMessages';
+import { FEEDBACK_MESSAGES } from '../../../resources/feedbackMessages';
 
 export default {
   title: 'components/ui/Inputs',
@@ -15,7 +15,7 @@ EmailInput.args = {
   label: 'Email',
   type: 'text',
   hasError: false,
-  errorMsg: feedbackMessages.input.invalidEmail,
+  errorMsg: FEEDBACK_MESSAGES.input.invalidEmail,
 };
 
 export const PasswordInput = Template.bind({});
@@ -24,5 +24,5 @@ PasswordInput.args = {
   label: 'Password',
   type: 'password',
   hasError: false,
-  errorMsg: feedbackMessages.input.invalidPassword,
+  errorMsg: FEEDBACK_MESSAGES.input.invalidPassword,
 };

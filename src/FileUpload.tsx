@@ -61,7 +61,7 @@ const FileUpload: React.FC = () => {
           logout{' '}
         </button>
       </div>
-      <LoginForm/>
+      <LoginForm />
     </>
   );
 };

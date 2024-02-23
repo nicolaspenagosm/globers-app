@@ -10,6 +10,7 @@ interface InputProps {
   errorMsg?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
+  isRequired: boolean;
 }
 
 const defaultProps: Partial<InputProps> = {
@@ -24,6 +25,7 @@ const Input: React.FC<InputProps> = ({
   errorMsg,
   onChange,
   value,
+  isRequired,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -51,6 +53,8 @@ const Input: React.FC<InputProps> = ({
           type={isPasswordInput && !showPassword ? 'password' : 'text'}
           aria-invalid={hasError ? 'true' : 'false'}
           autoComplete="false"
+          aria-required={isRequired}
+          aria-describedby={`${label}Msg`}
         />
         <label
           htmlFor={label}
@@ -59,7 +63,13 @@ const Input: React.FC<InputProps> = ({
           {label}
         </label>
       </StyledInput>
-      {hasError && <P role="alert" aria-live="assertive">{`* ${errorMsg}`}</P>}
+      {hasError && (
+        <P
+          role="alert"
+          aria-live="assertive"
+          id={`${label}Msg`}
+        >{`* ${errorMsg}`}</P>
+      )}
     </InputBox>
   );
 };

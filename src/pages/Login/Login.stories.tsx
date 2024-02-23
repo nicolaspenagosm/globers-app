@@ -10,6 +10,4 @@ const Template: StoryFn<typeof Login> = (args) => <Login {...args} />;
 
 export const LoginPage = Template.bind({});
 
-LoginPage.args = {
-
-};
+LoginPage.args = {};

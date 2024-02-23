@@ -9,4 +9,3 @@ export default {
 const Template: StoryFn<typeof LoginForm> = (args) => <LoginForm {...args} />;
 
 export const EmailInput = Template.bind({});
-

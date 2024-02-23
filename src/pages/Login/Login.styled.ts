@@ -34,7 +34,7 @@ export const Main = styled.main`
   }
 `;
 
-export const P = styled.p`
+export const Div = styled.div`
   margin-top: 1rem;
   text-align: center;
 `;
