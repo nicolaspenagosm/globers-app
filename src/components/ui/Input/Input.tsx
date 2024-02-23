@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import eyeIcon from '../../../assets/eye.png';
 import hideEyeIcon from '../../../assets/hide-eye.png';
-import { StyledInputBox, StyledP } from './Input.styled';
+import { StyledInput, P, InputBox } from './Input.styled';
 
 interface InputProps {
   label: string;
@@ -33,8 +33,8 @@ const Input: React.FC<InputProps> = ({
   const showPasswordIcon = showPassword ? hideEyeIcon : eyeIcon;
 
   return (
-    <>
-      <StyledInputBox isPassword={isPasswordInput} hasError={hasError}>
+    <InputBox>
+      <StyledInput $isPassword={isPasswordInput} $hasError={hasError}>
         {isPasswordInput && (
           <img
             src={showPasswordIcon}
@@ -50,6 +50,7 @@ const Input: React.FC<InputProps> = ({
           id={label}
           type={isPasswordInput && !showPassword ? 'password' : 'text'}
           aria-invalid={hasError ? 'true' : 'false'}
+          autoComplete="false"
         />
         <label
           htmlFor={label}
@@ -57,11 +58,9 @@ const Input: React.FC<InputProps> = ({
         >
           {label}
         </label>
-      </StyledInputBox>
-      {hasError && (
-        <StyledP role="alert" aria-live="assertive">{`* ${errorMsg}`}</StyledP>
-      )}
-    </>
+      </StyledInput>
+      {hasError && <P role="alert" aria-live="assertive">{`* ${errorMsg}`}</P>}
+    </InputBox>
   );
 };
 

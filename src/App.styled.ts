@@ -4,8 +4,8 @@ export type Styles = Interpolation<React.CSSProperties>;
 
 export const darkTheme = {
   responsiveBreakpoints: {
-    mobileBreakpoint: 845,
-    tabletBreakpoint: 1150,
+    mobile: 845,
+    tablet: 1150,
   },
   colors: {
     accentEmphasis: '#6F792F',
@@ -19,13 +19,14 @@ export const darkTheme = {
     secondaryEmphasis: '#F1F1F1',
     warningEmphasis: '#5A2C34',
     warning: '#CF6679',
+    text500: '#393A32',
   },
 };
 
 export const lightTheme = {
   responsiveBreakpoints: {
-    mobileBreakpoint: 845,
-    tabletBreakpoint: 1150,
+    mobile: 845,
+    tablet: 1150,
   },
   //   primary400: "#D8F0FA",
   //   primary500: "#FBF4E2",
@@ -35,13 +36,16 @@ export const lightTheme = {
     accent400: '#D7E57A',
     accent: '#C1D72F',
     accent700: '#B0C42B',
+    accent800: '#A0B228',
     primaryEmphasis: '#939581',
     primary: '#393A32',
     primary400: '#5A5B50',
     secondary: '#FFFFFF',
     secondaryEmphasis: '#F1F1F1',
+    secondary700: '#F8F8F8',
     warningEmphasis: '#EFD6DB',
     warning: '#CF6679',
+    text500: '#393A32',
   },
 
   //   accent600: "#70738C",
@@ -83,6 +87,10 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.colors.text500};
 
   }
+
+  html, body{
+    height: 100%;
+  }
  
   /* HTML5 display-role reset for older browsers */
   article, aside, details, figcaption, figure, 
@@ -118,6 +126,10 @@ export const GlobalStyles = createGlobalStyle`
 
  *, *::before, *::after {
   box-sizing: border-box;
+  }
+
+  #root{
+    height: 100%;
   }
 
 `;

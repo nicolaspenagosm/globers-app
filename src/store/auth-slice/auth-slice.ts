@@ -13,7 +13,7 @@ export type AuthState = {
   tokenData: TokenData;
 };
 
-export interface AuthResponseData {
+export interface IAuthResponseData {
   kind: string;
   idToken: string;
   email: string;

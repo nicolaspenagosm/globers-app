@@ -6,7 +6,7 @@ import { ROOT_PATHS } from '../../../App';
 
 const PrivateRoutes: React.FC = () => {
   const loggedUser = useSelector((state: RootState) => state.auth.loggedUser);
-  return loggedUser ? <Outlet /> : <Navigate to={ROOT_PATHS.login} />;
+  return loggedUser ? <Outlet /> : <Navigate to={ROOT_PATHS.auth} />;
 };
 
 export default PrivateRoutes;

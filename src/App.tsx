@@ -9,10 +9,12 @@ import { streamingAPI } from './services/streaming-sse';
 import { autoLogin } from './store/auth-slice/auth-actions';
 import { useAppDispatch } from './store';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyles, darkTheme } from './App.styled';
+import { GlobalStyles, lightTheme } from './App.styled';
+import { useResponsiveScreen } from './hooks/useResponsiveScreen';
 
 export const ROOT_PATHS = {
-  login: '/login',
+  auth: '/auth',
+  signUp: '/auth/sign_up',
   overview: '/',
   favorites: '/favorites',
   contacts: '/contacts',
@@ -26,11 +28,14 @@ function App() {
       console.log('Hola');
     };
     dispatch(autoLogin(fn));
+
     return () => streamingAPI.closeConnections();
   }, [dispatch]);
 
+  useResponsiveScreen();
+
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
@@ -38,7 +43,8 @@ function App() {
             <Route element={<Overview />} path={ROOT_PATHS.overview} />
             <Route element={<Contacts />} path={ROOT_PATHS.contacts} />
           </Route>
-          <Route element={<Login />} path={ROOT_PATHS.login} />
+          <Route element={<Login />} path={ROOT_PATHS.auth} />
+          <Route element={<Login />} path={ROOT_PATHS.signUp} />
           <Route element={<PageNotFound />} path={ROOT_PATHS.notFound} />
           <Route element={<Navigate to={ROOT_PATHS.notFound} />} />
         </Routes>

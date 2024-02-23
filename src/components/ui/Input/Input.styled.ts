@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
-export const StyledInputBox = styled.div<{
-  isPassword: boolean;
-  hasError: boolean;
+export const StyledInput = styled.div<{
+  $isPassword: boolean;
+  $hasError: boolean;
 }>`
   position: relative;
   height: 2.75rem;
   width: 100%;
   border-top-right-radius: 0.375rem;
   border-top-left-radius: 0.375rem;
-  border-bottom: solid 1.5px;
-  border-color: ${({ theme, hasError }) =>
-    hasError ? theme.colors.warning : theme.colors.secondary};
+  border-bottom: solid 2px;
+  border-color: ${({ theme, $hasError }) =>
+    $hasError ? theme.colors.warning : theme.colors.secondary};
   background-color: ${({ theme }) => theme.colors.accent400};
 
   label {
@@ -50,7 +50,8 @@ export const StyledInputBox = styled.div<{
     background-color: transparent;
     border-color: transparent;
     padding-left: 0.875rem;
-    padding-right: ${({ isPassword }) => (isPassword ? '2.25rem' : '0.875rem')};
+    padding-right: ${({ $isPassword }) =>
+      $isPassword ? '2.25rem' : '0.875rem'};
     outline: none;
 
     &:focus {
@@ -62,10 +63,14 @@ export const StyledInputBox = styled.div<{
   }
 `;
 
-export const StyledP = styled.p`
+export const P = styled.p`
+  margin-top: 4px;
   font-size: 0.75rem;
-  margin-top: 0.25rem;
   color: ${({ theme }) => theme.colors.warning};
-  margin-bottom: 0.5rem;
   margin-left: 0.75rem;
+  text-align: left;
+`;
+
+export const InputBox = styled.div`
+  width: 100%;
 `;
