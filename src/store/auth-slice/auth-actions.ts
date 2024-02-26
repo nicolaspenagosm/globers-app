@@ -1,5 +1,5 @@
-import { Dispatch } from '@reduxjs/toolkit';
-import { IAuth, IUser } from '../../types/shared';
+import { Dispatch, createAsyncThunk } from '@reduxjs/toolkit';
+import { IAuth } from '../../types/shared';
 import { authAPI } from '../../services/auth-api';
 import { authActions } from './auth-slice';
 import { crudAPI } from '../../services/crud-api';
@@ -10,7 +10,6 @@ import {
   fromSecondsToMiliseconds,
   isDateExpired,
 } from '../../utils/date';
-import { IOnUpdateFn } from '../../services/streaming-sse/StreamingSSE/StreamingSSE';
 import store from '..';
 import {
   authDataExists as authDataExistsInLocalStorage,
@@ -18,63 +17,88 @@ import {
   getAuthDataFromLocalStorage as getAuthDataFromLocalStorage,
   persistsAuthDataInLocalStorage,
 } from '../../utils/localStorage';
-import { uiActions } from '../ui-slice/ui-slice';
+import { handleErrorResponse } from '../../utils/erros';
+import { AuthDataResponse, ErrorMsg, LoginParams, SignUpParams } from './types';
 
-export const signUp = (
-  authCredentials: IAuth,
-  user: IUser,
-  userPhoto: File | null,
-) => {
-  return async (dispatch: Dispatch) => {
-    dispatch(uiActions.setAppIsFetching(true));
-    const { userId } = await authUser(authCredentials, dispatch, true);
-    user.id = userId;
-    if (userPhoto)
-      user.photoUrl = await storageAPI.uploadFile(userId, userPhoto);
-    await crudAPI.putUser(user);
-    dispatch(authActions.setLoggedUser(user));
-    dispatch(uiActions.setAppIsFetching(false));
-  };
-};
+const NAMESPACE = 'auth';
 
-export const login = (
-  authCredentials: IAuth,
-  onUpdateCallback: IOnUpdateFn,
-) => {
-  return async (dispatch: Dispatch) => {
-    dispatch(uiActions.setAppIsFetching(true));
-    const { userId, token } = await authUser(authCredentials, dispatch, false);
-    await loadUser(userId, token, dispatch, onUpdateCallback);
-    dispatch(uiActions.setAppIsFetching(false));
-  };
-};
+export const signUp = createAsyncThunk<
+  AuthDataResponse,
+  SignUpParams,
+  { rejectValue: ErrorMsg }
+>(
+  `${NAMESPACE}/signUp`,
+  async (
+    { authCredentials, user, userPhoto },
+    { dispatch, rejectWithValue },
+  ) => {
+    try {
+      const { userId, tokenData } = await authUser(
+        authCredentials,
+        dispatch,
+        true,
+      );
+      user.id = userId;
+      if (userPhoto)
+        user.photoUrl = await storageAPI.uploadFile(userId, userPhoto);
+      await crudAPI.putUser(user, tokenData.token);
+      return { tokenData, user };
+    } catch (error) {
+      const errorMsg = handleErrorResponse(error);
+      return rejectWithValue({ errorMsg });
+    }
+  },
+);
+
+export const login = createAsyncThunk<
+  AuthDataResponse,
+  LoginParams,
+  { rejectValue: ErrorMsg }
+>(
+  `${NAMESPACE}/login`,
+  async ({ authCredentials }, { dispatch, rejectWithValue }) => {
+    try {
+      const { userId, tokenData } = await authUser(
+        authCredentials,
+        dispatch,
+        false,
+      );
+
+      const user = (await crudAPI.getUser(userId, tokenData.token)).data;
+      return { tokenData, user };
+    } catch (error) {
+      const errorMsg = handleErrorResponse(error);
+      return rejectWithValue({ errorMsg });
+    }
+  },
+);
+
+export const autoLogin = createAsyncThunk<
+  AuthDataResponse,
+  void,
+  { rejectValue: void }
+>(`${NAMESPACE}/autoLogin`, async (_: void, { dispatch, rejectWithValue }) => {
+  if (!authDataExistsInLocalStorage()) {
+    return rejectWithValue();
+  }
+  const { tokenData, userId } = getAuthDataFromLocalStorage();
+
+  const tokenExpirationDate = +tokenData!.tokenExpirationDate;
+  const minutesThreshold = 5;
+  if (isDateExpired(tokenExpirationDate, minutesThreshold)) {
+    clearAuthDataInLocalStorage();
+    return rejectWithValue();
+  }
+
+  handleAutologout(calculateExpiresIn(tokenExpirationDate), dispatch);
+
+  const user = (await crudAPI.getUser(userId!, tokenData!.token)).data;
+  return { tokenData, user };
+});
 
 export const logout = () => {
   return async (dispatch: Dispatch) => {
     revokeUserAuth(dispatch);
-  };
-};
-
-export const autoLogin = (onUpdateCallback: IOnUpdateFn) => {
-  return async (dispatch: Dispatch) => {
-    if (!authDataExistsInLocalStorage()) {
-      dispatch(authActions.setLoggedUser(null));
-      return;
-    }
-    const { tokenData, userId } = getAuthDataFromLocalStorage();
-
-    const tokenExpirationDate = +tokenData!.tokenExpirationDate;
-    const minutesThreshold = 5;
-    if (isDateExpired(tokenExpirationDate, minutesThreshold)) {
-      clearAuthDataInLocalStorage();
-      return;
-    }
-
-    //clearPreviousTokenExpirationTimeout();
-    dispatch(authActions.setToken(tokenData));
-    handleAutologout(calculateExpiresIn(tokenExpirationDate), dispatch);
-
-    loadUser(userId!, tokenData!.token, dispatch, onUpdateCallback);
   };
 };
 
@@ -95,31 +119,15 @@ const authUser = async (
 
   const expiresInMiliseconds = fromSecondsToMiliseconds(+expiresIn);
 
+  clearPreviousTokenExpirationTimeout();
+
   const tokenData = {
     token: idToken,
     tokenExpirationDate: Date.now() + expiresInMiliseconds,
-    tokenExpirationTimerId: null,
+    tokenExpirationTimerId: +handleAutologout(expiresInMiliseconds, dispatch),
   };
-  clearPreviousTokenExpirationTimeout();
-  dispatch(authActions.setToken(tokenData));
   persistsAuthDataInLocalStorage(tokenData, userId);
-  handleAutologout(expiresInMiliseconds, dispatch);
-  return { token: idToken, userId: userId };
-};
-
-const loadUser = async (
-  userId: string,
-  token: string,
-  dispatch: Dispatch,
-  onUpdateCallback: IOnUpdateFn,
-) => {
-  const loggedUser = (await crudAPI.getUser(userId)).data;
-  dispatch(authActions.setLoggedUser(loggedUser));
-
-  // TODO: Handle this
-  if (loggedUser.email === 'never') {
-    streamingAPI.streamChatUpdates({ auth: token }, userId, onUpdateCallback);
-  }
+  return { tokenData, userId };
 };
 
 const revokeUserAuth = (dispatch: Dispatch) => {
@@ -130,11 +138,9 @@ const revokeUserAuth = (dispatch: Dispatch) => {
 };
 
 const handleAutologout = (expiresIn: number, dispatch: Dispatch) => {
-  // clearPreviousTokenExpirationTimeout();
-  const timerId = setTimeout(() => {
+  return setTimeout(() => {
     revokeUserAuth(dispatch);
   }, expiresIn);
-  dispatch(authActions.setAutoLogoutTimer({ timerId }));
 };
 
 const clearPreviousTokenExpirationTimeout = () => {

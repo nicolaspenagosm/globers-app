@@ -1,16 +1,24 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { StyledForm } from './LoginForm.styled';
+import { ErrorContainer, ErrorIcon, ErrorMsg, StyledForm } from './LoginForm.styled';
 import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 import { FEEDBACK_MESSAGES } from '../../../resources/feedbackMessages';
 import { emailVaidator as emailVaidatorRegex } from '../../../resources/regexs';
-import { RootState, useAppDispatch } from '../../../store';
+import { useAppDispatch } from '../../../store';
 import { login, signUp } from '../../../store/auth-slice/auth-actions';
 import ProfilePictureLoader from '../../ui/ProfilePictureLoader';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import FetchingProgressBar from '../../ui/FetchingProgressBar';
 import { useSelector } from 'react-redux';
+import {
+  selectAuthErrorMsg,
+  selectAuthRequestStatus,
+} from '../../../store/auth-slice/auth-selectors';
+import { HTTP_STATUS } from '../../../resources/http';
+
+import alertIcon from '../../../assets/alert-icon.png';
+import { mapFirebaseErrorMsg } from '../../../utils/erros';
 
 interface LoginInputs {
   email: string;
@@ -25,9 +33,8 @@ interface SingUpInputs extends LoginInputs {
 }
 
 const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
-  const appIsFetching = useSelector(
-    (state: RootState) => state.ui.appIsFetching,
-  );
+  const appIsFetching = useSelector(selectAuthRequestStatus);
+  const errorMsg = useSelector(selectAuthErrorMsg);
 
   const {
     control,
@@ -50,19 +57,19 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
       returnSecureToken: true,
     };
 
-    try {
-      if (isSigningUp) {
-        const user = {
-          email: userData.email,
-          name: userData.name,
-          lastname: userData.lastname,
-        };
-        dispatch(signUp(authCredentials, user, userData.imageFile));
-      } else {
-        dispatch(login(authCredentials, () => {}));
-      }
-    } catch (e) {
-      console.log(e)
+    if (isSigningUp) {
+      const user = {
+        email: userData.email,
+        name: userData.name,
+        lastname: userData.lastname,
+      };
+      dispatch(
+        signUp({ authCredentials, user, userPhoto: userData.imageFile }),
+      );
+    } else {
+      dispatch(login({ authCredentials })).catch(() => {
+        reset();
+      });
     }
   };
 
@@ -195,7 +202,12 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
         type="submit"
         aria-label="Login to your account"
       />
-      {appIsFetching && createPortal(<FetchingProgressBar />, document.body)}
+      {errorMsg && <ErrorContainer>
+        <ErrorIcon src={alertIcon}/>
+        <ErrorMsg>{mapFirebaseErrorMsg(errorMsg)}</ErrorMsg>
+        </ErrorContainer>}
+      {appIsFetching === HTTP_STATUS.PENDING &&
+        createPortal(<FetchingProgressBar />, document.body)}
     </StyledForm>
   );
 };

@@ -23,7 +23,9 @@ export const darkTheme = {
     secondaryEmphasis: '#F1F1F1',
     warningEmphasis: '#5A2C34',
     warning: '#D06A7D',
+    warning700: '#EC1818',
     text500: '#393A32',
+    text300: '#393A32'
   },
 };
 
@@ -49,6 +51,7 @@ export const lightTheme = {
     secondary700: '#F8F8F8',
     warningEmphasis: '#EFD6DB',
     warning: '#D06A7D',
+    warning700: '#EC1818',
     text500: '#393A32',
   },
 };

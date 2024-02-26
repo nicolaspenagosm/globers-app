@@ -29,7 +29,7 @@ export class StreamingSSE {
     params: IHTTPParams,
   ) {
     if (typeof EventSource === 'undefined')
-      throw new Error(ERROR_MSGS.streamingAPI.sseNotSupported.msg);
+      throw new Error(ERROR_MSGS.streamingAPI.SSE_NOT_SUPPORTED.msg);
 
     if (this.source) this.close();
 
@@ -47,7 +47,7 @@ export class StreamingSSE {
       () => {
         this.close();
         console.error(
-          `${ERROR_MSGS.streamingAPI.connectionError.code}:${ERROR_MSGS.streamingAPI.connectionError.msg}`,
+          `${ERROR_MSGS.streamingAPI.STREAMING_ERROR.code}:${ERROR_MSGS.streamingAPI.STREAMING_ERROR.msg}`,
         );
       },
       false,
@@ -82,7 +82,7 @@ export class StreamingSSE {
   public static getInstance(baseUrl?: string): StreamingSSE {
     if (!this.instance) {
       if (!baseUrl)
-        throw new Error(ERROR_MSGS.streamingAPI.invalidFirstGetInstance.msg);
+        throw new Error(ERROR_MSGS.streamingAPI.INVALID_FIRST_GET_INSTANCE.msg);
       this.instance = new StreamingSSE(baseUrl);
     }
     return this.instance;

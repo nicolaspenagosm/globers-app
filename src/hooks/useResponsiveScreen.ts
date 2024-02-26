@@ -8,7 +8,7 @@ export const useResponsiveScreen = () => {
 
   useState(() => {
     const handleResize = () => {
-      console.log(window.innerWidth <= theme.responsiveBreakpoints.mobile);
+  
       const screenIsMobile =
         window.innerWidth <= theme.responsiveBreakpoints.mobile;
       dispatch(uiActions.setScreenIsMobile(screenIsMobile));

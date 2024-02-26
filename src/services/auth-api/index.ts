@@ -1,17 +1,13 @@
-import { IAuthResponseData } from '../../store/auth-slice/auth-slice';
+
+import { IAuthResponseData } from '../../store/auth-slice/types';
 import { IAuth } from '../../types/shared';
-import { handleErrorResponse } from '../../utils/erros';
 import { post } from './base';
 
 const BASE_ENDPOINT = `accounts:`;
 
 export const authAPI = {
   login: (params: IAuth) =>
-    post<IAuthResponseData>(`${BASE_ENDPOINT}signInWithPassword`, params).catch(
-      (error) => handleErrorResponse(error),
-    ),
+    post<IAuthResponseData>(`${BASE_ENDPOINT}signInWithPassword`, params),
   signUp: (params: IAuth) =>
-    post<IAuthResponseData>(`${BASE_ENDPOINT}signUp`, params).catch((error) =>
-      handleErrorResponse(error),
-    ),
+    post<IAuthResponseData>(`${BASE_ENDPOINT}signUp`, params),
 };

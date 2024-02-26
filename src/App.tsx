@@ -16,10 +16,8 @@ import { ROOT_PATHS } from './resources/routes';
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    const fn = () => {
-      console.log('Hola');
-    };
-    dispatch(autoLogin(fn));
+
+    dispatch(autoLogin());
 
     return () => streamingAPI.closeConnections();
   }, [dispatch]);

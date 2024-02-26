@@ -29,14 +29,14 @@ const Login: React.FC = () => {
         if (loggedUser) navigate('/');
       }, LOADING_MODAL_MIN_DURATION);
     }
-
   }, [loggedUser, navigate]);
 
   const loginCopy = (
-    <H3>
-      Let’s connect with <br />
-      your coworkers and clients!
-    </H3>
+    // <H3>
+    //   Let’s connect with <br />
+    //   your coworkers and clients!
+    // </H3>
+    <H3>Nicolas Penagos Montoya</H3>
   );
 
   const isSingingUp = location.pathname === ROOT_PATHS.signUp;
