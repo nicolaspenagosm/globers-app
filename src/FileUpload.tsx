@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { useAppDispatch } from './store';
 import { login, logout } from './store/auth-slice/auth-actions';
-import LoginForm from './components/auth/LoginForm';
 
 const FileUpload: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -61,7 +60,6 @@ const FileUpload: React.FC = () => {
           logout{' '}
         </button>
       </div>
-      <LoginForm />
     </>
   );
 };

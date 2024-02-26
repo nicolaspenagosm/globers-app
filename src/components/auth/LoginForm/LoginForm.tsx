@@ -4,35 +4,94 @@ import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 import { FEEDBACK_MESSAGES } from '../../../resources/feedbackMessages';
 import { emailVaidator as emailVaidatorRegex } from '../../../resources/regexs';
+import { RootState, useAppDispatch } from '../../../store';
+import { login, signUp } from '../../../store/auth-slice/auth-actions';
+import ProfilePictureLoader from '../../ui/ProfilePictureLoader';
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import FetchingProgressBar from '../../ui/FetchingProgressBar';
+import { useSelector } from 'react-redux';
 
-type Inputs = {
+interface LoginInputs {
   email: string;
   password: string;
+}
+
+interface SingUpInputs extends LoginInputs {
   passwordValidation: string;
   name: string;
   lastname: string;
-};
+  imageFile: File;
+}
 
 const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
+  const appIsFetching = useSelector(
+    (state: RootState) => state.ui.appIsFetching,
+  );
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-    getValues,
-  } = useForm<Inputs>();
+    watch,
+    reset,
+  } = useForm<SingUpInputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  useEffect(() => {
+    reset();
+  }, [isSigningUp, reset]);
 
-  // TO-DO:changing an uncontrolled input to be controlled. This is likely caused by the value changing from undefined to a defined value, which should not happen. Decide between using a controlled or uncontrolled input element for the lifetime of the component
+  const dispatch = useAppDispatch();
+
+  const onSubmit: SubmitHandler<SingUpInputs> = (userData) => {
+    const authCredentials = {
+      email: userData.email,
+      password: userData.password,
+      returnSecureToken: true,
+    };
+
+    try {
+      if (isSigningUp) {
+        const user = {
+          email: userData.email,
+          name: userData.name,
+          lastname: userData.lastname,
+        };
+        dispatch(signUp(authCredentials, user, userData.imageFile));
+      } else {
+        dispatch(login(authCredentials, () => {}));
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  };
+
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+    <StyledForm
+      onSubmit={handleSubmit(onSubmit)}
+      $styles={isSigningUp ? null : { paddingTop: '2.5rem' }}
+    >
       {isSigningUp && (
         <>
           <Controller
+            name="imageFile"
+            control={control}
+            render={({ field }) => (
+              <ProfilePictureLoader
+                onChange={(e) =>
+                  field.onChange({
+                    target: { value: e.target.files![0], name: field.name },
+                  })
+                }
+              />
+            )}
+          />
+          <Controller
             name="name"
+            defaultValue=""
             control={control}
             rules={{
-              required: true,
+              required: isSigningUp,
             }}
             render={({ field }) => (
               <Input
@@ -48,9 +107,10 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
           />
           <Controller
             name="lastname"
+            defaultValue=""
             control={control}
             rules={{
-              required: true,
+              required: isSigningUp,
             }}
             render={({ field }) => (
               <Input
@@ -68,6 +128,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
       )}
       <Controller
         name="email"
+        defaultValue=""
         control={control}
         rules={{
           required: true,
@@ -87,6 +148,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
       />
       <Controller
         name="password"
+        defaultValue=""
         control={control}
         rules={{
           required: true,
@@ -107,11 +169,11 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
       {isSigningUp && (
         <Controller
           name="passwordValidation"
+          defaultValue=""
           control={control}
           rules={{
-            required: true,
-            minLength: 6,
-            pattern: new RegExp(`^${getValues().password}$`),
+            required: isSigningUp,
+            pattern: new RegExp(`^${watch('password')}$`),
           }}
           render={({ field }) => (
             <Input
@@ -126,7 +188,6 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
           )}
         />
       )}
-
       <Button
         label={isSigningUp ? 'Sign Up' : 'Login'}
         hasPrimaryStyle={true}
@@ -134,6 +195,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
         type="submit"
         aria-label="Login to your account"
       />
+      {appIsFetching && createPortal(<FetchingProgressBar />, document.body)}
     </StyledForm>
   );
 };

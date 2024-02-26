@@ -18,6 +18,7 @@ import {
   getAuthDataFromLocalStorage as getAuthDataFromLocalStorage,
   persistsAuthDataInLocalStorage,
 } from '../../utils/localStorage';
+import { uiActions } from '../ui-slice/ui-slice';
 
 export const signUp = (
   authCredentials: IAuth,
@@ -25,12 +26,14 @@ export const signUp = (
   userPhoto: File | null,
 ) => {
   return async (dispatch: Dispatch) => {
+    dispatch(uiActions.setAppIsFetching(true));
     const { userId } = await authUser(authCredentials, dispatch, true);
     user.id = userId;
     if (userPhoto)
       user.photoUrl = await storageAPI.uploadFile(userId, userPhoto);
     await crudAPI.putUser(user);
     dispatch(authActions.setLoggedUser(user));
+    dispatch(uiActions.setAppIsFetching(false));
   };
 };
 
@@ -39,8 +42,10 @@ export const login = (
   onUpdateCallback: IOnUpdateFn,
 ) => {
   return async (dispatch: Dispatch) => {
+    dispatch(uiActions.setAppIsFetching(true));
     const { userId, token } = await authUser(authCredentials, dispatch, false);
-    loadUser(userId, token, dispatch, onUpdateCallback);
+    await loadUser(userId, token, dispatch, onUpdateCallback);
+    dispatch(uiActions.setAppIsFetching(false));
   };
 };
 
@@ -52,7 +57,10 @@ export const logout = () => {
 
 export const autoLogin = (onUpdateCallback: IOnUpdateFn) => {
   return async (dispatch: Dispatch) => {
-    if (!authDataExistsInLocalStorage()) return;
+    if (!authDataExistsInLocalStorage()) {
+      dispatch(authActions.setLoggedUser(null));
+      return;
+    }
     const { tokenData, userId } = getAuthDataFromLocalStorage();
 
     const tokenExpirationDate = +tokenData!.tokenExpirationDate;
@@ -108,7 +116,8 @@ const loadUser = async (
   const loggedUser = (await crudAPI.getUser(userId)).data;
   dispatch(authActions.setLoggedUser(loggedUser));
 
-  if (loggedUser.chatsKeys) {
+  // TODO: Handle this
+  if (loggedUser.email === 'never') {
     streamingAPI.streamChatUpdates({ auth: token }, userId, onUpdateCallback);
   }
 };

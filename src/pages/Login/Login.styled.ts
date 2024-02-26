@@ -21,14 +21,14 @@ export const StyledLoginPage = styled.section`
 export const Main = styled.main`
   margin-top: auto;
   margin-bottom: auto;
-  transform: translateY(-75px);
+
   width: 100%;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 
   @media (min-width: ${({ theme }) => theme.responsiveBreakpoints.mobile}px) {
     width: 50%;
-    transform: translateY(0);
+
     padding-left: 7rem;
     padding-right: 7rem;
   }
@@ -40,14 +40,13 @@ export const Div = styled.div`
 `;
 
 export const H3 = styled.h3`
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   text-align: center;
   margin-bottom: 1rem;
   @media (min-width: ${({ theme }) => theme.responsiveBreakpoints.mobile}px) {
     text-align: left;
     margin-top: 1rem;
     margin-left: 0.25rem;
-    font-size: 1.25rem;
   }
 `;
 

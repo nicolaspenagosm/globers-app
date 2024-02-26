@@ -9,7 +9,7 @@ export type TokenData = {
 } | null;
 
 export type AuthState = {
-  loggedUser: IUser | null;
+  loggedUser: IUser | null | undefined;
   tokenData: TokenData;
 };
 
@@ -25,7 +25,7 @@ export interface IAuthResponseData {
 }
 
 const initialState: AuthState = {
-  loggedUser: null,
+  loggedUser: undefined,
   tokenData: null,
 };
 
@@ -46,7 +46,7 @@ const authSlice = createSlice({
       state.loggedUser = null;
       state.tokenData = null;
     },
-    setLoggedUser(state, { payload }: PayloadAction<IUser>) {
+    setLoggedUser(state, { payload }: PayloadAction<IUser | null>) {
       state.loggedUser = payload;
     },
   },

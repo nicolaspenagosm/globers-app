@@ -31,6 +31,7 @@ RemoveFromFavorites.args = {
   type: 'button',
   color: 'warning',
   ariaLabel: 'Remove a contact from favorites',
+  hasPrimaryStyle:false
 };
 
 export const AddToFavorites = Template.bind({});

@@ -33,6 +33,7 @@ export const StyledButton = styled.button<{
     display: flex;
     align-items: center;
     font-size: 0.75rem;
+    color:inherit;
   }
 
   img {

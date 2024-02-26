@@ -52,7 +52,7 @@ const Input: React.FC<InputProps> = ({
           id={label}
           type={isPasswordInput && !showPassword ? 'password' : 'text'}
           aria-invalid={hasError ? 'true' : 'false'}
-          autoComplete="false"
+          autoComplete="off"
           aria-required={isRequired}
           aria-describedby={`${label}Msg`}
         />

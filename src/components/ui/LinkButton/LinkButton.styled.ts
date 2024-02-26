@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledLinkButton = styled.nav`
+export const StyledLinkButton = styled.span`
   background-color: transparent;
   border: none;
   a {
@@ -16,6 +16,7 @@ export const StyledLinkButton = styled.nav`
 
     &:focus {
       color: ${({ theme }) => theme.colors.accent800};
+      text-decoration: underline;
     }
   }
 `;
