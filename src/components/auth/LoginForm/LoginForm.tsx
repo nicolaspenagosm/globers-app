@@ -201,6 +201,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
         color="default"
         type="submit"
         aria-label="Login to your account"
+        onClick={()=>{}}
       />
       {errorMsg && <ErrorContainer>
         <ErrorIcon src={alertIcon}/>

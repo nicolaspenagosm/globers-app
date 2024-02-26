@@ -10,6 +10,7 @@ interface ButtonProps {
   hasPrimaryStyle: boolean;
   color: 'action' | 'warning' | 'default';
   ariaLabel?: string;
+  onClick: () => void;
 }
 
 const defaultProps: Partial<ButtonProps> = {
@@ -25,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
   hasPrimaryStyle,
   color,
   ariaLabel,
+  onClick,
 }) => {
   const { colors } = useTheme();
 
@@ -62,6 +64,7 @@ const Button: React.FC<ButtonProps> = ({
       $styles={buttonStyles.$styles}
       $hoverStyles={buttonStyles.$hoverStyles}
       aria-label={ariaLabel}
+      onClick={onClick}
     >
       {icon && <img src={icon} alt={ariaLabel} aria-hidden={true} />}
       {label && <span> {label}</span>}

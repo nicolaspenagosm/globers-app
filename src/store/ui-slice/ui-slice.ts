@@ -3,11 +3,13 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 export type UiState = {
   screenIsMobile: boolean;
   appIsFetching: boolean;
+  isLightTheme: boolean;
 };
 
 const initialState: UiState = {
   screenIsMobile: false,
   appIsFetching: false,
+  isLightTheme: true,
 };
 const uiSlice = createSlice({
   name: 'ui',
@@ -19,6 +21,9 @@ const uiSlice = createSlice({
     setAppIsFetching(state, { payload }: PayloadAction<boolean>) {
       state.appIsFetching = payload;
     },
+    setIsLightTheme(state, {payload}:PayloadAction<boolean>){
+      state.isLightTheme = payload;
+    }
   },
 });
 

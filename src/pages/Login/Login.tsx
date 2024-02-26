@@ -1,5 +1,6 @@
 import { StyledLoginPage, Main, Div, H3, Img, Header } from './Login.styled';
 import globantLogo from './../../assets/globant-logo.png';
+import globantLogoLight from './../../assets/globant-logo-white.png';
 import LoginForm from '../../components/auth/LoginForm';
 import { LinkButton } from '../../components/ui/LinkButton/LinkButton';
 import { useSelector } from 'react-redux';
@@ -9,6 +10,8 @@ import { ROOT_PATHS } from '../../resources/routes';
 import { useEffect, useState } from 'react';
 import LoadingModal from '../../components/ui/LoadingModal';
 import { createPortal } from 'react-dom';
+import ThemeToggler from '../../components/ui/ThemeToggler';
+import { selectIsLightTheme } from '../../store/ui-slice/selectors';
 
 const LOADING_MODAL_MIN_DURATION = 500;
 
@@ -21,6 +24,7 @@ const Login: React.FC = () => {
 
   const [showLoadingModal, setShowLoadingModal] = useState(true);
   const loggedUser = useSelector((state: RootState) => state.auth.loggedUser);
+  const isLightTheme = useSelector(selectIsLightTheme);
 
   useEffect(() => {
     if (loggedUser === null || loggedUser) {
@@ -32,22 +36,23 @@ const Login: React.FC = () => {
   }, [loggedUser, navigate]);
 
   const loginCopy = (
-    // <H3>
-    //   Let’s connect with <br />
-    //   your coworkers and clients!
-    // </H3>
-    <H3>Nicolas Penagos Montoya</H3>
+    <H3>
+      Let’s connect with <br />
+      your coworkers and clients!
+    </H3>
   );
 
   const isSingingUp = location.pathname === ROOT_PATHS.signUp;
+  const themeLogo = isLightTheme ? globantLogo : globantLogoLight;
 
   return (
     <>
       {showLoadingModal && createPortal(<LoadingModal />, document.body)}
+      <ThemeToggler />
       <StyledLoginPage>
         <Header>
           <div>
-            <Img src={globantLogo} draggable={false} alt="Globant logo" />
+            <Img src={themeLogo} draggable={false} alt="Globant logo" />
             {!screenIsMobile && loginCopy}
           </div>
         </Header>

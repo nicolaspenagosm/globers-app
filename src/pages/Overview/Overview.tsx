@@ -1,5 +1,5 @@
 const Overview: React.FC = () => {
-  return <section style={{paddingTop:"4rem"}}>Overview screen</section>;
+  return <section >Overview screen</section>;
 };
 
 export default Overview;

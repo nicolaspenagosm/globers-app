@@ -97,7 +97,7 @@ export const autoLogin = createAsyncThunk<
 });
 
 export const logout = () => {
-  return async (dispatch: Dispatch) => {
+  return (dispatch: Dispatch) => {
     revokeUserAuth(dispatch);
   };
 };

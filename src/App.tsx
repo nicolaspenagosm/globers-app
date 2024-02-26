@@ -9,14 +9,15 @@ import { streamingAPI } from './services/streaming-sse';
 import { autoLogin } from './store/auth-slice/auth-actions';
 import { useAppDispatch } from './store';
 import { ThemeProvider } from 'styled-components';
-import { GlobalStyles, lightTheme } from './App.styled';
+import { GlobalStyles, lightTheme, darkTheme } from './App.styled';
 import { useResponsiveScreen } from './hooks/useResponsiveScreen';
 import { ROOT_PATHS } from './resources/routes';
+import { useSelector } from 'react-redux';
+import { selectIsLightTheme } from './store/ui-slice/selectors';
 
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
-
     dispatch(autoLogin());
 
     return () => streamingAPI.closeConnections();
@@ -24,8 +25,10 @@ function App() {
 
   useResponsiveScreen();
 
+  const isLightTheme = useSelector(selectIsLightTheme);
+  console.log(isLightTheme);
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={isLightTheme ? lightTheme : darkTheme}>
       <GlobalStyles />
       <BrowserRouter>
         <Routes>

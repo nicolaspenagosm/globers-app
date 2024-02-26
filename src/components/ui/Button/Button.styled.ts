@@ -14,6 +14,7 @@ export const StyledButton = styled.button<{
   border-radius: 0.5rem;
   box-shadow: 0px 3px 5px 0px rgba(140, 149, 159, 0.3);
   text-transform: uppercase;
+  color:${({ theme }) => theme.colors.primary} ;
   border: solid 1px;
   width: fit-content;
   cursor: pointer;

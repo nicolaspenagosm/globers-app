@@ -8,27 +8,26 @@ export const StyledLoginPage = styled.section`
   align-items: center;
   padding-top: 3rem;
   padding-bottom: 3rem;
-  background-color: ${({ theme }) => theme.colors.secondary700};
+  background-color: ${({ theme }) => theme.colors.bgAlt};
 
   @media (min-width: ${({ theme }) => theme.responsiveBreakpoints.mobile}px) {
     flex-direction: row;
     padding-top: 0rem;
     padding-bottom: 0rem;
-    background-color: ${({ theme }) => theme.colors.secondary};
+    background-color: ${({ theme }) => theme.colors.bg};
   }
 `;
 
 export const Main = styled.main`
   margin-top: auto;
   margin-bottom: auto;
-
+  
   width: 100%;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 
   @media (min-width: ${({ theme }) => theme.responsiveBreakpoints.mobile}px) {
     width: 50%;
-
     padding-left: 7rem;
     padding-right: 7rem;
   }
@@ -65,6 +64,6 @@ export const Header = styled.header`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: ${({ theme }) => theme.colors.secondary700};
+    background-color: ${({ theme }) => theme.colors.bgAlt};
   }
 `;
