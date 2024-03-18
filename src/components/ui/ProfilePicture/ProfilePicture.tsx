@@ -1,14 +1,21 @@
-import { ProfilePictureContainer } from './ProfilePicture.styled';
+import { StyledProfilePicture, ProfilePicturePlaceHolder as ProfilePicturePlaceholder } from './ProfilePicture.styled';
 import defaultUserPic from '../../../assets/default-user-pic.jpg';
 
 export interface ProfilePictureProps {
   $img?: string | null;
   $size?: string;
-  $borderWidth?:string
+  $borderWidth?: string;
+  isPlaceholder?: boolean;
 }
-const ProfilePciture: React.FC<ProfilePictureProps> = ({ $img, $size, $borderWidth }) => {
+const ProfilePciture: React.FC<ProfilePictureProps> = ({
+  $img,
+  $size,
+  $borderWidth,
+  isPlaceholder,
+}) => {
+  if (isPlaceholder) return <ProfilePicturePlaceholder $size={$size} />;
   return (
-    <ProfilePictureContainer
+    <StyledProfilePicture
       $img={$img || defaultUserPic}
       $size={$size}
       $borderWidth={$borderWidth}

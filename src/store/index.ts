@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './auth-slice/auth-slice';
-import uiReducer from './ui-slice/ui-slice';
+import authReducer from './auth/slice';
+import uiReducer from './ui/slice';
+import overviewReducer from './overview/slice';
 
 import { useDispatch } from 'react-redux';
 
 const store = configureStore({
-  reducer: { auth: authReducer, ui: uiReducer },
+  reducer: { auth: authReducer, ui: uiReducer, overview: overviewReducer },
 });
 
 export type AppDispatch = typeof store.dispatch;

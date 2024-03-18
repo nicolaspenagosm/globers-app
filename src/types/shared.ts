@@ -1,3 +1,4 @@
+
 export interface IEntity {
   id?: string;
 }
@@ -11,6 +12,7 @@ export interface IUser extends IEntity {
 
 export interface IContact extends IUser {
   nameUniqueKey: string;
+  isFavorite:string
 }
 
 export interface IAuth {
@@ -22,3 +24,5 @@ export interface IAuth {
 export interface IHTTPParams {
   [key: string]: string | number;
 }
+
+export type TNoValue = null | undefined;

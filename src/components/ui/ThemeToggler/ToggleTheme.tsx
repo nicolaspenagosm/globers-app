@@ -1,14 +1,17 @@
 import { useSelector } from 'react-redux';
-import { selectIsLightTheme } from '../../../store/ui-slice/selectors';
+import { selectIsLightTheme } from '../../../store/ui/selectors';
 import { useAppDispatch } from '../../../store';
-import { uiActions } from '../../../store/ui-slice/ui-slice';
+import { uiActions } from '../../../store/ui/slice';
+import { Styles } from '../../../App.styled';
 
-const ThemeToggler: React.FC = () => {
+const ThemeToggler: React.FC<{ absolute: boolean }> = ({ absolute }) => {
   const isLightTheme = useSelector(selectIsLightTheme);
   const dispatch = useAppDispatch();
-
+  const styles = absolute
+    ? { position: 'absolute', top: '10px', right: '10px' }
+    : null;
   return (
-    <div>
+    <div style={styles}>
       <button
         onClick={() => {
           dispatch(uiActions.setIsLightTheme(!isLightTheme));

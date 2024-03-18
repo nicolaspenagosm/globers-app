@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 import LoadingModal from '../../components/ui/LoadingModal';
 import { createPortal } from 'react-dom';
 import ThemeToggler from '../../components/ui/ThemeToggler';
-import { selectIsLightTheme } from '../../store/ui-slice/selectors';
+import { selectIsLightTheme } from '../../store/ui/selectors';
 
 const LOADING_MODAL_MIN_DURATION = 500;
 
@@ -48,7 +48,7 @@ const Login: React.FC = () => {
   return (
     <>
       {showLoadingModal && createPortal(<LoadingModal />, document.body)}
-      <ThemeToggler />
+      <ThemeToggler absolute={true} />
       <StyledLoginPage>
         <Header>
           <div>
@@ -60,7 +60,7 @@ const Login: React.FC = () => {
           {screenIsMobile && loginCopy}
           <LoginForm isSigningUp={isSingingUp} />
           <Div>
-            {isSingingUp ? "Don't have an account? " : 'Have an account? '}
+            {isSingingUp ? 'Have an account? ' : "Don't have an account? "}
             <LinkButton
               label={isSingingUp ? 'Login' : 'Sign up'}
               to={isSingingUp ? ROOT_PATHS.auth : ROOT_PATHS.signUp}

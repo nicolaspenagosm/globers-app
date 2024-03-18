@@ -1,5 +1,5 @@
 
-import { IAuthResponseData } from '../../store/auth-slice/types';
+import { IAuthResponseData } from '../../store/auth/types';
 import { IAuth } from '../../types/shared';
 import { post } from './base';
 

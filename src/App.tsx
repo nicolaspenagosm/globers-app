@@ -6,14 +6,15 @@ import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
 import { useEffect } from 'react';
 import { streamingAPI } from './services/streaming-sse';
-import { autoLogin } from './store/auth-slice/auth-actions';
+import { autoLogin } from './store/auth/actions';
 import { useAppDispatch } from './store';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyles, lightTheme, darkTheme } from './App.styled';
 import { useResponsiveScreen } from './hooks/useResponsiveScreen';
 import { ROOT_PATHS } from './resources/routes';
 import { useSelector } from 'react-redux';
-import { selectIsLightTheme } from './store/ui-slice/selectors';
+import { selectIsLightTheme } from './store/ui/selectors';
+import useAutoLoadTheme from './hooks/useAutoLoadTheme';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -23,10 +24,11 @@ function App() {
     return () => streamingAPI.closeConnections();
   }, [dispatch]);
 
+  useAutoLoadTheme();
   useResponsiveScreen();
 
   const isLightTheme = useSelector(selectIsLightTheme);
-  console.log(isLightTheme);
+
   return (
     <ThemeProvider theme={isLightTheme ? lightTheme : darkTheme}>
       <GlobalStyles />

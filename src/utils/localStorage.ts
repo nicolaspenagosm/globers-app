@@ -1,4 +1,4 @@
-import { TokenData } from "../store/auth-slice/types";
+import { TokenData } from "../store/auth/types";
 
 
 const LOCAL_STORAGE_USER_KEY_ID = 'app-logged-user-id';
@@ -13,7 +13,6 @@ export const persistsAuthDataInLocalStorage = (
 };
 
 export const clearAuthDataInLocalStorage = () => {
-  console.log(LOCAL_STORAGE_USER_KEY_ID)
   localStorage.removeItem(LOCAL_STORAGE_USER_KEY_ID);
   localStorage.removeItem(LOCAL_STORAGE_AUTH_KEY);
 };

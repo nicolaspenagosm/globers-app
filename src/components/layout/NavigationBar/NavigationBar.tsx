@@ -1,17 +1,20 @@
-import { Link } from 'react-router-dom';
-import { NavList, StyledNavigationBar } from './NavigationBar.styled';
+import {
+  NavList,
+  StyledNavigationBar,
+  StyledNavLink,
+} from './NavigationBar.styled';
 import { ROOT_PATHS } from '../../../resources/routes';
 import Button from '../../ui/Button';
 import addIcon from '../../../assets/add-icon.png';
 import ProfilePciture from '../../ui/ProfilePicture';
 import { useSelector } from 'react-redux';
-import { selectLoggedUser } from '../../../store/auth-slice/auth-selectors';
+import { selectLoggedUser } from '../../../store/auth/selectors';
 import defaultPicture from '../../../assets/default-user-photo.jpeg';
 import { UserDataSection } from './NavigationBar.styled';
 import ThemeToggler from '../../ui/ThemeToggler';
 import logoutIcon from '../../../assets/logout-icon.png';
 import { useAppDispatch } from '../../../store';
-import { logout } from '../../../store/auth-slice/auth-actions';
+import { logout } from '../../../store/auth/actions';
 
 const NavigationBar: React.FC = () => {
   const loggedUser = useSelector(selectLoggedUser);
@@ -43,15 +46,15 @@ const NavigationBar: React.FC = () => {
       </UserDataSection>
       <section>
         <NavList>
-          <ThemeToggler />
+          <ThemeToggler absolute={false} />
           <li>
-            <Link to={ROOT_PATHS.overview}>Overview</Link>
+            <StyledNavLink to={ROOT_PATHS.overview}>Overview</StyledNavLink>
           </li>
           <li>
-            <Link to={ROOT_PATHS.contacts}>Contacts</Link>
+            <StyledNavLink to={ROOT_PATHS.contacts}>Contacts</StyledNavLink>
           </li>
           <li>
-            <Link to={ROOT_PATHS.favorites}>Favorites</Link>
+            <StyledNavLink to={ROOT_PATHS.favorites}>Favorites</StyledNavLink>
           </li>
           <Button
             label="New"

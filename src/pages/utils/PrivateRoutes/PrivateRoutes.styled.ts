@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Main = styled.main`
-    margin-top: 4rem;
-    background-color: ${({theme})=>theme.colors.bg};
-    height: 100%                                     ;
-`
+  padding: 8rem 4rem 4rem 4rem;
+  background-color: ${({ theme }) => theme.colors.bgAlt};
+  min-height: 100vh;
+`;

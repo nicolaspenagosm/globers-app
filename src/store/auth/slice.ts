@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IUser } from '../../types/shared';
-import { login, signUp, autoLogin } from './auth-actions';
+import { login, signUp, autoLogin } from './actions';
 import { HTTP_STATUS } from '../../resources/http';
 import { AuthState, TokenData } from './types';
 

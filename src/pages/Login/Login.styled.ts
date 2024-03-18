@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledLoginPage = styled.section`
-  height: 100%;
+ height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -19,8 +19,7 @@ export const StyledLoginPage = styled.section`
 `;
 
 export const Main = styled.main`
-  margin-top: auto;
-  margin-bottom: auto;
+
   
   width: 100%;
   padding-left: 1.5rem;
@@ -34,7 +33,7 @@ export const Main = styled.main`
 `;
 
 export const Div = styled.div`
-  margin-top: 1rem;
+   margin-top: 1rem;
   text-align: center;
 `;
 

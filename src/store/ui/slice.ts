@@ -6,10 +6,14 @@ export type UiState = {
   isLightTheme: boolean;
 };
 
+export const LIGHT_MODE = 'light';
+export const DARK_MODE = 'dark';
+export const MODE_KEY = 'themeMode';
+
 const initialState: UiState = {
   screenIsMobile: false,
   appIsFetching: false,
-  isLightTheme: true,
+  isLightTheme: localStorage.getItem(MODE_KEY) === LIGHT_MODE ? true : false,
 };
 const uiSlice = createSlice({
   name: 'ui',
@@ -21,9 +25,9 @@ const uiSlice = createSlice({
     setAppIsFetching(state, { payload }: PayloadAction<boolean>) {
       state.appIsFetching = payload;
     },
-    setIsLightTheme(state, {payload}:PayloadAction<boolean>){
+    setIsLightTheme(state, { payload }: PayloadAction<boolean>) {
       state.isLightTheme = payload;
-    }
+    },
   },
 });
 

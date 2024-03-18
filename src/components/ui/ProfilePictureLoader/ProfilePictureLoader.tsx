@@ -36,7 +36,7 @@ const ProfilePictureLoader: React.FC<{
           hiddenInputRef.current = e || undefined;
         }}
       />
-      <ProfilePciture img={preview} />
+      <ProfilePciture $img={preview} />
       <TextButton type="button" onClick={triggerOnUpload}>
         {uploadButtonLabel}
       </TextButton>

@@ -9,7 +9,7 @@ export const darkTheme = {
   },
   colors: {
     accentEmphasis: '#96A72A',
-    accent400: '#D7E57A',
+    accent400: '#9FB02D',
     accent: '#C1D72F',
     accent700: '#B0C42B',
     accentSecondary: '#27559B',
@@ -17,7 +17,7 @@ export const darkTheme = {
     primaryEmphasis: '#939581',
     primary: '#21231F',
     primary400: '#5A5B50',
-    secondary: '#869528',
+    secondary: '#798812',
     secondary600: '#EBEBEB',
     secondary700: '#F8F8F8',
     secondaryEmphasis: '#6F792F',
@@ -58,8 +58,7 @@ export const lightTheme = {
     text500: '#393A32',
     text300: '#5C5C5C',
     bg: '#FFFFFF',
-    bgAlt: '#F8F8F8',
-
+    bgAlt: '#EEEEEE',
     shadow: '#00000008',
   },
 };
@@ -140,5 +139,9 @@ export const GlobalStyles = createGlobalStyle`
   #root{
     height: 100%;
   }
+
+*{
+  //transition: background-color 200ms linear;
+}
 
 `;

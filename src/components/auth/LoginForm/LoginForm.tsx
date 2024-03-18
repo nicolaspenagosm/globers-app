@@ -1,20 +1,25 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { ErrorContainer, ErrorIcon, ErrorMsg, StyledForm } from './LoginForm.styled';
+import {
+  ErrorContainer,
+  ErrorIcon,
+  ErrorMsg,
+  StyledForm,
+} from './LoginForm.styled';
 import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 import { FEEDBACK_MESSAGES } from '../../../resources/feedbackMessages';
 import { emailVaidator as emailVaidatorRegex } from '../../../resources/regexs';
 import { useAppDispatch } from '../../../store';
-import { login, signUp } from '../../../store/auth-slice/auth-actions';
+import { login, signUp } from '../../../store/auth/actions';
 import ProfilePictureLoader from '../../ui/ProfilePictureLoader';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import FetchingProgressBar from '../../ui/FetchingProgressBar';
 import { useSelector } from 'react-redux';
 import {
   selectAuthErrorMsg,
   selectAuthRequestStatus,
-} from '../../../store/auth-slice/auth-selectors';
+} from '../../../store/auth/selectors';
 import { HTTP_STATUS } from '../../../resources/http';
 
 import alertIcon from '../../../assets/alert-icon.png';
@@ -35,6 +40,7 @@ interface SingUpInputs extends LoginInputs {
 const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
   const appIsFetching = useSelector(selectAuthRequestStatus);
   const errorMsg = useSelector(selectAuthErrorMsg);
+  const focusRef = useRef<HTMLInputElement>(null);
 
   const {
     control,
@@ -46,6 +52,8 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
 
   useEffect(() => {
     reset();
+   // console.log(focusRef.current);
+    focusRef.current?.focus();
   }, [isSigningUp, reset]);
 
   const dispatch = useAppDispatch();
@@ -109,6 +117,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
                 onChange={field.onChange}
                 value={field.value}
                 isRequired={true}
+               // ref={isSigningUp ? focusRef : null}
               />
             )}
           />
@@ -150,6 +159,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
             onChange={field.onChange}
             value={field.value}
             isRequired={true}
+           // ref={isSigningUp ? null : focusRef}
           />
         )}
       />
@@ -201,12 +211,14 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
         color="default"
         type="submit"
         aria-label="Login to your account"
-        onClick={()=>{}}
+        onClick={() => {}}
       />
-      {errorMsg && <ErrorContainer>
-        <ErrorIcon src={alertIcon}/>
-        <ErrorMsg>{mapFirebaseErrorMsg(errorMsg)}</ErrorMsg>
-        </ErrorContainer>}
+      {errorMsg && (
+        <ErrorContainer>
+          <ErrorIcon src={alertIcon} />
+          <ErrorMsg>{mapFirebaseErrorMsg(errorMsg)}</ErrorMsg>
+        </ErrorContainer>
+      )}
       {appIsFetching === HTTP_STATUS.PENDING &&
         createPortal(<FetchingProgressBar />, document.body)}
     </StyledForm>

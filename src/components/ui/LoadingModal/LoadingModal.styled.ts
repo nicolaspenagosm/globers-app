@@ -4,9 +4,9 @@ export const StyledLoadingModal = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vw;
-  background-color: ${({ theme }) => theme.colors.secondary};
+  height: 100%;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.bg};
   display: flex;
   flex-direction: column;
   align-items: center;

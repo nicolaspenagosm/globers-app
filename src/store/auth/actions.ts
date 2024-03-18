@@ -1,7 +1,7 @@
 import { Dispatch, createAsyncThunk } from '@reduxjs/toolkit';
 import { IAuth } from '../../types/shared';
 import { authAPI } from '../../services/auth-api';
-import { authActions } from './auth-slice';
+import { authActions } from './slice';
 import { crudAPI } from '../../services/crud-api';
 import { storageAPI } from '../../services/firebase-api/storage-api';
 import { streamingAPI } from '../../services/streaming-sse';

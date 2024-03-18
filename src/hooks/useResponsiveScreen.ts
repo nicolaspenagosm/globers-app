@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { uiActions } from '../store/ui-slice/ui-slice';
+import { uiActions } from '../store/ui/slice';
 import { lightTheme as theme } from '../App.styled';
 
 export const useResponsiveScreen = () => {

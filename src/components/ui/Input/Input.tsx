@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {  useState } from 'react';
 import eyeIcon from '../../../assets/eye.png';
 import hideEyeIcon from '../../../assets/hide-eye.png';
 import { StyledInput, P, InputBox } from './Input.styled';
@@ -8,9 +8,10 @@ interface InputProps {
   type: 'text' | 'password';
   hasError: boolean;
   errorMsg?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement> | undefined) => void;
   value: string;
   isRequired: boolean;
+  //ref?: Ref<HTMLInputElement>;
 }
 
 const defaultProps: Partial<InputProps> = {
@@ -26,6 +27,7 @@ const Input: React.FC<InputProps> = ({
   onChange,
   value,
   isRequired,
+ // ref,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -55,6 +57,7 @@ const Input: React.FC<InputProps> = ({
           autoComplete="off"
           aria-required={isRequired}
           aria-describedby={`${label}Msg`}
+       //   ref={ref ? ref : null}
         />
         <label
           htmlFor={label}
