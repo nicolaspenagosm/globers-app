@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const StyledContact = styled.article`
   background-color: ${({ theme }) => theme.colors.bg};
@@ -26,6 +26,11 @@ export const StyledContact = styled.article`
     p {
       color: ${({ theme }) => theme.colors.text300};
     }
+    div:last-child{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
   }
   hr {
     width: 100%;
@@ -34,10 +39,25 @@ export const StyledContact = styled.article`
   }
 `;
 
+const loadingAnim = keyframes`
+    0% {
+      opacity: 1;
+    }
+    50% {
+     opacity: 0.5;
+    }
+    100% {
+     opacity: 1;
+    }
+`;
+
 export const TextLinePlaceHolder = styled.div`
   height: 1rem;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.bgAlt};
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
+
+  animation: ${loadingAnim} 1s ease-in-out infinite;
 `;
+

@@ -15,6 +15,7 @@ import { ROOT_PATHS } from './resources/routes';
 import { useSelector } from 'react-redux';
 import { selectIsLightTheme } from './store/ui/selectors';
 import useAutoLoadTheme from './hooks/useAutoLoadTheme';
+import Favorites from './pages/Favorites/Favorites';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -37,6 +38,7 @@ function App() {
           <Route element={<PrivateRoutes />}>
             <Route element={<Overview />} path={ROOT_PATHS.overview} />
             <Route element={<Contacts />} path={ROOT_PATHS.contacts} />
+            <Route element={<Favorites/>} path={ROOT_PATHS.favorites} />
           </Route>
           <Route element={<Login />} path={ROOT_PATHS.auth} />
           <Route element={<Login />} path={ROOT_PATHS.signUp} />

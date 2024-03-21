@@ -1,36 +1,37 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectLoggedUser } from '../../store/auth/selectors';
-import { StyledOverview } from './Overview.styled';
 import ContactsGrid from '../../components/contacts/ContactsGrid';
 import SectionSeparator from '../../components/contacts/SectionSeparator';
 import { useAppDispatch } from '../../store';
-import { fetchOverviewData } from '../../store/overview/actions';
+
+import PageContainer from '../../components/layout/PageContainer';
 import {
-  selectContacts,
-  selectFavContacts,
-} from '../../store/overview/selectors';
+  selectContactsOverview,
+  selectFavContactsOverview,
+} from '../../store/contacts/selectors';
+import { fetchOverviewData } from '../../store/contacts/actions';
 
 const Overview: React.FC = () => {
   const loggedUser = useSelector(selectLoggedUser);
 
   const dispatch = useAppDispatch();
-  const favContacts = useSelector(selectFavContacts);
-  const contacts = useSelector(selectContacts);
+  const favContacts = useSelector(selectFavContactsOverview);
+  const contacts = useSelector(selectContactsOverview);
 
   useEffect(() => {
     if (loggedUser && (favContacts.length === 0 || contacts.length === 0)) {
-      dispatch(fetchOverviewData({ userId: loggedUser!.id! }));
+      dispatch(fetchOverviewData({ userId: loggedUser.id! }));
     }
-  }, [loggedUser, favContacts, contacts]);
+  }, [loggedUser, favContacts, contacts, dispatch]);
 
   return (
-    <StyledOverview>
+    <PageContainer>
       <SectionSeparator label="Favorites" />
       <ContactsGrid contacts={favContacts} />
       <SectionSeparator label="Contact List" />
       <ContactsGrid contacts={contacts} />
-    </StyledOverview>
+    </PageContainer>
   );
 };
 

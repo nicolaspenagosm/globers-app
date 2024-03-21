@@ -28,12 +28,12 @@ export const crudAPI = {
 
   getUserContacts: (
     userId: string,
-    limit?: number | TNoValue,
+    limitToFirst?: number | TNoValue,
     startAt?: string | TNoValue,
     filterFavorites?: boolean | TNoValue,
   ) => {
     const params: IHTTPParams = {};
-    if (limit) params.limit = limit;
+    if (limitToFirst) params.limitToFirst = limitToFirst;
     if (startAt) params.startAt = startAt;
 
     if (typeof filterFavorites === 'boolean') {

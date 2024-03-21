@@ -4,7 +4,7 @@ import { StyledButton } from './Button.styled';
 import { useMemo } from 'react';
 
 interface ButtonProps {
-  label: string;
+  label?: string;
   icon?: string;
   type: 'button' | 'submit' | 'reset';
   hasPrimaryStyle: boolean;
