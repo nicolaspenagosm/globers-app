@@ -17,6 +17,7 @@ import { selectIsLightTheme } from './store/ui/selectors';
 import useAutoLoadTheme from './hooks/useAutoLoadTheme';
 import Favorites from './pages/Favorites/Favorites';
 
+
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {

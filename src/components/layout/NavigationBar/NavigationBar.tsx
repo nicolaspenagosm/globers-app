@@ -15,6 +15,9 @@ import ThemeToggler from '../../ui/ThemeToggler';
 import logoutIcon from '../../../assets/logout-icon.png';
 import { useAppDispatch } from '../../../store';
 import { logout } from '../../../store/auth/actions';
+import { useState } from 'react';
+import ModalContainer from '../ModalContainer/ModalContainer';
+import NewContactForm from '../../contacts/NewContactForm';
 
 const NavigationBar: React.FC = () => {
   const loggedUser = useSelector(selectLoggedUser);
@@ -23,50 +26,68 @@ const NavigationBar: React.FC = () => {
   const handleLogout = () => {
     dispatch(logout());
   };
+
+  const [showModal, setShowModal] = useState(false);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
   return (
-    <StyledNavigationBar>
-      <UserDataSection>
-        <ProfilePciture
-          $img={profilePictureUrl}
-          $size={'2.75rem'}
-          $borderWidth="0"
-        />
-        <div>
-          <h3>{`${loggedUser?.name} ${loggedUser?.lastname}`}</h3>
-          <h6>{`${loggedUser?.email}`}</h6>
-        </div>
-        <Button
-          label="Logout"
-          icon={logoutIcon}
-          hasPrimaryStyle={true}
-          type="button"
-          color="action"
-          onClick={handleLogout}
-        />
-      </UserDataSection>
-      <section>
-        <NavList>
-          <ThemeToggler absolute={false} />
-          <li>
-            <StyledNavLink to={ROOT_PATHS.overview}>Overview</StyledNavLink>
-          </li>
-          <li>
-            <StyledNavLink to={ROOT_PATHS.contacts}>Contacts</StyledNavLink>
-          </li>
-          <li>
-            <StyledNavLink to={ROOT_PATHS.favorites}>Favorites</StyledNavLink>
-          </li>
+    <>
+      <StyledNavigationBar>
+        <UserDataSection>
+          <ProfilePciture
+            $img={profilePictureUrl}
+            $size={'2.75rem'}
+            $borderWidth="0"
+          />
+          <div>
+            <h3>{`${loggedUser?.name} ${loggedUser?.lastname}`}</h3>
+            <h6>{`${loggedUser?.email}`}</h6>
+          </div>
           <Button
-            label="New"
+            label="Logout"
+            icon={logoutIcon}
             hasPrimaryStyle={true}
             type="button"
             color="action"
-            icon={addIcon}
-            onClick={() => {}}
+            onClick={handleLogout}
           />
-        </NavList>
-      </section>
-    </StyledNavigationBar>
+        </UserDataSection>
+        <section>
+          <NavList>
+            <ThemeToggler absolute={false} />
+            <li>
+              <StyledNavLink to={ROOT_PATHS.overview}>Overview</StyledNavLink>
+            </li>
+            <li>
+              <StyledNavLink to={ROOT_PATHS.contacts}>Contacts</StyledNavLink>
+            </li>
+            <li>
+              <StyledNavLink to={ROOT_PATHS.favorites}>Favorites</StyledNavLink>
+            </li>
+            <Button
+              label="New"
+              hasPrimaryStyle={true}
+              type="button"
+              color="action"
+              icon={addIcon}
+              onClick={openModal}
+            />
+          </NavList>
+        </section>
+      </StyledNavigationBar>
+      {showModal && (
+        <ModalContainer onClose={closeModal}>
+          <NewContactForm />
+        </ModalContainer>
+      )}
+    </>
   );
 };
 

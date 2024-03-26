@@ -1,10 +1,5 @@
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import {
-  ErrorContainer,
-  ErrorIcon,
-  ErrorMsg,
-  StyledForm,
-} from './LoginForm.styled';
+import { ErrorContainer, ErrorIcon, ErrorMsg } from './LoginForm.styled';
 import Input from '../../ui/Input';
 import Button from '../../ui/Button';
 import { FEEDBACK_MESSAGES } from '../../../resources/feedbackMessages';
@@ -24,6 +19,7 @@ import { HTTP_STATUS } from '../../../resources/http';
 
 import alertIcon from '../../../assets/alert-icon.png';
 import { mapFirebaseErrorMsg } from '../../../utils/erros';
+import FormContainer from '../../layout/FormContainer';
 
 interface LoginInputs {
   email: string;
@@ -38,6 +34,7 @@ interface SingUpInputs extends LoginInputs {
 }
 
 const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
+
   const appIsFetching = useSelector(selectAuthRequestStatus);
   const errorMsg = useSelector(selectAuthErrorMsg);
   const focusRef = useRef<HTMLInputElement>(null);
@@ -52,7 +49,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
 
   useEffect(() => {
     reset();
-   // console.log(focusRef.current);
+    // console.log(focusRef.current);
     focusRef.current?.focus();
   }, [isSigningUp, reset]);
 
@@ -82,7 +79,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
   };
 
   return (
-    <StyledForm
+    <FormContainer
       onSubmit={handleSubmit(onSubmit)}
       $styles={isSigningUp ? null : { paddingTop: '2.5rem' }}
     >
@@ -117,7 +114,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
                 onChange={field.onChange}
                 value={field.value}
                 isRequired={true}
-               // ref={isSigningUp ? focusRef : null}
+                // ref={isSigningUp ? focusRef : null}
               />
             )}
           />
@@ -159,7 +156,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
             onChange={field.onChange}
             value={field.value}
             isRequired={true}
-           // ref={isSigningUp ? null : focusRef}
+            // ref={isSigningUp ? null : focusRef}
           />
         )}
       />
@@ -221,7 +218,7 @@ const LoginForm: React.FC<{ isSigningUp: boolean }> = ({ isSigningUp }) => {
       )}
       {appIsFetching === HTTP_STATUS.PENDING &&
         createPortal(<FetchingProgressBar />, document.body)}
-    </StyledForm>
+    </FormContainer>
   );
 };
 
